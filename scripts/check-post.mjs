@@ -73,10 +73,10 @@ for (const file of files) {
   else if (String(data.description).length > 160) report("WARN", slug, `description is ${String(data.description).length} chars; 160 is the useful limit for previews`);
   // Schema 2: the TL;DR is what lets a reader decide in ten seconds, and what search shows.
   const tldr = Array.isArray(data.tldr) ? data.tldr.map(String).filter(Boolean) : [];
-  if (Number(data.schema ?? 0) >= 2 && tldr.length === 0) report("ERROR", slug, "missing tldr (schema 2 requires 3–5 bullets)");
-  else if (tldr.length > 0 && (tldr.length < 3 || tldr.length > 5)) report("WARN", slug, `tldr has ${tldr.length} bullets; 3–5 is the range`);
+  if (Number(data.schema ?? 0) >= 2 && tldr.length === 0) report("ERROR", slug, "missing tldr (schema 2 requires 3–4 bullets)");
+  else if (tldr.length > 0 && (tldr.length < 3 || tldr.length > 4)) report("WARN", slug, `tldr has ${tldr.length} bullets; 3–4 is the range`);
   for (const line of tldr) {
-    if (line.length > 180) report("WARN", slug, `tldr bullet is ${line.length} chars; keep each under ~180: "${line.slice(0, 40)}…"`);
+    if (line.length > 130) report("WARN", slug, `tldr bullet is ${line.length} chars; one line, under ~130: "${line.slice(0, 40)}…"`);
     if (String(data.description ?? "").trim() === line.trim()) report("WARN", slug, "a tldr bullet repeats the description; they should say different things");
   }
   if (!Array.isArray(data.tags) || data.tags.length === 0) report("WARN", slug, "no tags");

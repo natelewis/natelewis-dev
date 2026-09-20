@@ -4,11 +4,10 @@ title: "Google sign-in is a browser event. Making it an identity is the server's
 date: "2026-09-13"
 description: "How Google-only sign-in gets a server-verifiable identity on Next.js and Firebase: a session cookie, a static layout, and a proof that never clicks the popup."
 tldr:
-  - "A Firebase Google sign-in is a browser event; the server knows nothing until something carries it across. That something is a session cookie."
-  - "The browser posts its hourly ID token to one route handler; the server verifies it and mints a 14-day session cookie. getSessionUser() reads it anywhere."
-  - "Reading the cookie in a layout would make every page dynamic. Keeping the layout static and reading it only where identity is needed keeps prerendering."
-  - "An agent cannot click a Google popup, so the proof mints a custom token with the Admin SDK, exchanges it for a real ID token, and posts that to the same route."
-  - "Still open: sign-out does not revoke refresh tokens, and nothing yet uses the identity for anything."
+  - "A Google sign-in is a browser event. The server knows nothing until a route handler trades the ID token for a session cookie."
+  - "One cookies() call in the root layout makes every page dynamic. Read it only where identity is needed."
+  - "The agent can't click a Google popup, so it proved sign-in from the other end: mint a token, post it, verify the cookie."
+  - "Open: sign-out doesn't revoke tokens, and nothing uses the identity yet."
 tags: ["nextjs", "firebase", "auth", "agents"]
 accent: "#0ea5e9"
 draft: false
@@ -23,9 +22,12 @@ account, on the Firebase project the site already runs on.
 
 The Firebase client SDK makes the browser half a few lines: a popup, a
 Google provider, a user object. That is a browser event, and it is not yet an
-identity. **The site's server renders pages and answers route handlers, and
-nothing about a signed-in browser reaches it unless something carries it
-across.** This is how that half was built, with an agent doing the typing.
+identity. **Nothing about a signed-in browser reaches the server unless
+something carries it across.** Building that something was mostly routine.
+Two parts were not: the obvious place to read it, the root layout, would have
+made every page on the site render on demand; and the agent doing the work
+could not click a Google popup, so proving it worked had to come from the
+other end. This is how the server half was built.
 
 ## The problem
 

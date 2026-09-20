@@ -4,11 +4,10 @@ title: "The CI runner had two cores. Nobody had counted."
 date: "2026-09-17"
 description: "A first-pass CI had crept to eight minutes. I assumed slow tests. An agent and one afternoon of measuring found a two-core runner and a Postgres per test file."
 tldr:
-  - "GitHub-hosted runners for private repos have two cores. Jest's default is cores − 1, so every suite had run on one worker since the workflow was written."
-  - "Two thirds of the slowest suite was starting a Postgres container per test file. One container plus CREATE DATABASE … TEMPLATE took it from 69 s to 10.5 s."
-  - "A fix I set aside at 10% on my laptop (ts-jest isolatedModules) was worth 50% on the runner: its CPU is 3–5× slower at compile-heavy work."
-  - "One job became four plus a gate named after the old job, so branch rules did not change. Wall time 485 s → 108 s, no test edited."
-  - "Measure on the machine that matters. The one number I got wrong was trusting a laptop about a runner."
+  - "Private-repo GitHub runners have two cores. Jest had been running on one worker for months."
+  - "Starting Postgres per test file was two thirds of the slow suite. One container plus template DBs: 69 s → 10.5 s."
+  - "A fix worth 10% on my laptop was worth 50% on the runner. Measure on the machine that matters."
+  - "485 s → 108 s. No test changed."
 tags: ["ci", "github-actions", "testing", "agents"]
 accent: "#10b981"
 draft: false

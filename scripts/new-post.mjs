@@ -40,8 +40,8 @@ title: "${title.replace(/"/g, '\\"')}"
 date: "${date}"
 description: ""
 tldr:
-  # 3–5 bullets a reader can use without reading on: what was wrong, what fixed it,
-  # what it cost or won (with the number), the one rule. Written last, from the post.
+  # 3–4 bullets, one line each, the way you'd say it at a whiteboard: the surprise,
+  # the fix with its number, the rule. Not a summary of every section. Written last.
   - ""
 tags: [${tags.map((t) => `"${t}"`).join(", ")}]
 accent: "${accent}"

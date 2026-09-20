@@ -20,10 +20,10 @@ title: "A claim, not a topic"
 date: "2026-09-20"          # ISO; the published date, and the ordering. Backdate freely.
 updated: "2026-10-01"       # optional; only for a material revision after publishing
 description: "One sentence, ≤160 chars, shown in lists, RSS and <meta>."
-tldr:                       # 3–5 bullets; rendered in a box under the title,
-  - "What was wrong, in one line."          # and as the article's abstract in
-  - "What fixed it, with the number."       # the JSON-LD for search engines
-  - "The one thing to take away."
+tldr:                       # 3–4 one-line bullets; rendered in a box under the
+  - "The surprise."                         # title, and as the article's abstract
+  - "The fix, with its number."             # in the JSON-LD for search engines
+  - "The rule."
 tags: ["gov-data", "ai"]    # lowercase kebab-case; reuse existing tags first
 accent: "#0ea5e9"           # per-post accent colour
 draft: true                 # unlisted until false — see below
