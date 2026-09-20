@@ -1,11 +1,11 @@
 ---
 schema: 1
-title: "The model was writing 108 empty answers per bill"
+title: "Jev from typesafe.ai fixed 30% of my problem. Measuring it fixed the rest."
 date: "2026-09-19"
-description: "I went looking at a decision model to replace an LLM scoring step, and found the LLM was spending 95% of its output on zeros. Fixing that took three prompts."
+description: "I tried typesafe.ai's decision model to make an LLM scoring step cheaper. It would have, by a third. The harness I built to test it found the other two-thirds."
 tags: ["civic-tech", "llm", "prompting", "ollama"]
 accent: "#f59e0b"
-draft: true
+draft: false
 banner: "A person at a desk late at night with two stacks of paper beside the laptop: a tall, teetering stack of forms where every checkbox is empty, and a short neat stack of a few pages with real writing on them. The laptop shows a bar chart with one bar six times taller than the other. Through the window behind, the Capitol dome is small and distant."
 ---
 
@@ -16,10 +16,12 @@ bill helps and what it costs without reading the bill. An LLM does the scoring:
 it reads the text and returns a rank from −10 to 10 for each question, with a
 one-sentence reason.
 
-I went into this week wanting to know whether a new kind of model could do that
-scoring cheaper. I came out having changed the prompt instead, because the
-measurement I built to evaluate the new model showed the old one was spending
-almost all of its output on nothing.
+I went into this week wanting to know whether [Jev](https://docs.typesafe.ai/introduction),
+typesafe.ai's decision model — not an LLM — could do that scoring cheaper. It
+could, by about a third, and it did exactly what I asked of it. But **the
+measurement I built to evaluate it showed the old model was spending almost all
+of its output on nothing**, and fixing *that* was worth six times more than Jev
+was. Without Jev.
 
 ## The problem
 
@@ -39,10 +41,10 @@ answer at every leaf:
 ```
 
 and asked for the same tree back, filled in. It got exactly that: all 117
-leaves, every time. But the median bill affects nine of them. So a typical
+leaves, every time. But **the median bill affects nine of them.** So a typical
 response was ~10,000 characters — about 3,000 output tokens — of which ~1,000
-characters were content and the rest was `{"rank": 0, "reason": ""}` repeated
-108 times.
+characters were content and **the rest was `{"rank": 0, "reason": ""}` repeated
+108 times.**
 
 Output tokens are the slow half of generation. On the local model that does the
 backfill ([gemma4 26B](https://ollama.com/library/gemma4), a mixture-of-experts
@@ -63,7 +65,7 @@ from typesafe.ai. It is not an LLM. You send it a piece of text and a batch of
 typed questions — a *Choice* over options, a *Score* over described levels, a
 yes/no — and it returns a probability distribution over your options, never
 text. It ingests the document once and answers every question against it in
-parallel, so 117 questions cost about the same as one.
+parallel, so **117 questions cost about the same as one.**
 
 That shape is close to what the scoring step does, so I wrote a calibration
 harness: ten of the 117 metrics as five-level rubrics, run over 100 bills that
@@ -86,17 +88,21 @@ or its neighbours":
 ```
 
 100 bills × 10 questions took **26 seconds and $0.018**. Jev agreed with the
-stored scores on the sign 93% of the time, and its confidence meant something:
+stored scores on the sign **93% of the time**, and **its confidence meant something**:
 97% agreement on the 869 pairs it was sure about, 67% on the medium ones, 43%
 on the few low ones. Reading the disagreements, most were the *stored* model
 reaching — an auto-theft bill scored +1 for consumer protection "because it
 protects vehicle owners' property" — and Jev's literal reading was the more
 honest one for a voter.
 
-But Jev returns no reason, and the reason is the part I care about most. A score
+But **Jev returns no reason**, and the reason is the part I care about most. A score
 with no "why" is a number nobody can check. So it could only ever be half of a
-pipeline: Jev for the number, an LLM for the sentence. And the cost of the LLM
-half was exactly the 3,000 tokens of zeros I had just noticed.
+pipeline: Jev for the number, an LLM for the sentence — but only for the nine
+metrics that are non-zero, not all 117. I priced that split on the same bills:
+**about 35% cheaper and roughly twice as fast.** A real win, and I would have taken it.
+
+Except the reason the split saved anything was that the LLM half stopped writing
+3,000 tokens of zeros. Which meant **the bigger saving did not need Jev at all.**
 
 ### Sparse output: only return what you scored
 
@@ -115,30 +121,30 @@ prompt disagrees with itself by.
 
 | same model, 100 bills | avg time | avg chars | avg metrics scored | unparsed |
 | --- | --- | --- | --- | --- |
-| V1, all 117 leaves | 28.2 s | 11,664 | 6.5 | 3 |
-| V2a, scored only | **5.3 s** | **1,154** | **4.4** | 0 |
+| Original — every one of the 117 | 28.2 s | 11,664 | 6.5 | 3 |
+| Hits only | **5.3 s** | **1,154** | **4.4** | 0 |
 
-Five times faster, ten times smaller, no parse failures — and a third fewer
-metrics scored. The noise floor was 6.5 vs 6.4, so that drop was the prompt.
+Five times faster, ten times smaller, no parse failures — **and a third fewer
+metrics scored.** The noise floor was 6.5 vs 6.4, so that drop was the prompt.
 Reading what it dropped: some was the old model's reaching, but some was real
 and important — a bill creating firearm-storage penalties lost its −5 on
 Second Amendment protections; a pensions bill lost its +7 for seniors. Asked for
-only the hits, the model returned a bill's top two or three and stopped.
+only the hits, **the model returned a bill's top two or three and stopped.**
 
 ### Telling it to walk
 
-The obvious fix: say so. V2b added "consider every one of the questions in turn,
+The obvious fix: say so. The next version added "consider every one of the questions in turn,
 group by group, before you answer; a substantive bill typically affects between
 five and fifteen," and tightened the scoring to direct effects only.
 
-It got worse: 3.6 metrics per bill. Telling the model to walk the list did not
-make it walk the list.
+It got worse: 3.6 metrics per bill. **Telling the model to walk the list did not
+make it walk the list.**
 
 ### Making it walk
 
-What had made the old prompt thorough was not an instruction. Emitting 117
-leaves *was* the walk — the model visited every question because it had to write
-something for each one. So V2c required the walk structurally, at the cheapest
+What had made the old prompt thorough was not an instruction. **Emitting 117
+leaves *was* the walk** — the model visited every question because it had to write
+something for each one. So the third version required the walk structurally, at the cheapest
 level that still forces a visit: every domain and every group has to appear in
 the answer, in order, with `{}` for a group nothing in the bill touches.
 
@@ -150,7 +156,7 @@ bill does not affect is an empty object {}.
 ```
 
 Twenty-four groups is about a kilobyte of skeleton. Here is the whole answer for
-a bill about deceptive AI media in elections, 159 output tokens where V1 would
+a bill about deceptive AI media in elections, 159 output tokens where the original would
 have written 3,000:
 
 ```json
@@ -179,49 +185,54 @@ have written 3,000:
 
 | same model, 100 bills | avg time | avg chars | avg scored | unparsed |
 | --- | --- | --- | --- | --- |
-| V1, all 117 leaves | 28.2 s | 11,664 | 6.5 | 3 |
-| V2a, scored only | 5.3 s | 1,154 | 4.4 | 0 |
-| V2b, + "walk everything" in words | 2.7 s | 1,000 | 3.6 | 1 |
-| **V2c, + required skeleton** | **4.8 s** | **2,034** | **6.6** | **0** |
+| Original — every one of the 117 | 28.2 s | 11,664 | 6.5 | 3 |
+| Hits only | 5.3 s | 1,154 | 4.4 | 0 |
+| Hits only, told to be thorough | 2.7 s | 1,000 | 3.6 | 1 |
+| **Hits only, with the skeleton** | **4.8 s** | **2,034** | **6.6** | **0** |
 
-The count came back. Six times faster, six times smaller, and no malformed
-responses in a hundred.
+The count came back. **Six times faster, six times smaller, and no malformed
+responses in a hundred.**
 
 What did *not* come back is agreement on the tail. Against the old prompt, with
 the old prompt's disagreement with itself as the floor:
 
-| of V1's metrics at… | V2c keeps (same sign) | noise floor |
+| of the original's scores at… | the skeleton version keeps (same sign) | noise floor |
 | --- | --- | --- |
 | any rank | 62% | 86% |
 | \|rank\| ≥ 5 | 75% | 92% |
 | \|rank\| ≥ 7 | 86% | 95% |
 
-On every bill's substance the two agree — a renters' junk-fees bill is +7 for
+**On every bill's substance the two agree** — a renters' junk-fees bill is +7 for
 consumer protection under both, +6/+5 for affordable housing, +7/+7 for
 low-income households. They differ in the low-magnitude tail, and both tails are
-noisy in different ways. V1's was a demographic sweep: a collision-avoidance
-bill got eleven groups at +1, and V1 scored "increases federal power" on 44 of
-100 bills, which is a reflex, not a judgment. V2c has its own reaches (a
+noisy in different ways. The original's was a demographic sweep: a
+collision-avoidance bill got eleven groups at +1, and it scored "increases
+federal power" on 44 of 100 bills, which is a reflex, not a judgment. The
+skeleton version has its own reaches (a
 fisheries bill at +2 for racial equity). Of eight real scores I tracked that
-V2a had dropped, V2c brought back four and still misses four. One that bothers
+"hits only" had dropped, the skeleton version brought back four and still misses
+four. One that bothers
 me: a Caribbean security bill's +6 for international alliances.
 
 ## Where it landed
 
-V2c is what the pipeline runs now, for both the local backfill and the
+The skeleton version is what the pipeline runs now, for both the local backfill and the
 scheduled cloud jobs, since 2026-09-19. It needed no re-scoring: old and new
-responses derive to the same rows, so the change was a prompt and a docblock,
+responses derive to the same rows, so the change was a prompt and a comment,
 not a migration. The first bill scored under it wrote 234 output tokens.
 
-Jev is parked. Its numbers were good and its confidence signal is real, but
-once the LLM stopped writing zeros the cost argument for a two-model pipeline
-mostly went away, and the reason is not something it can write. The
-calibration harness and the ten rubrics stay in the repo for when that changes.
+Jev is parked, and not because it failed. It solved the problem I brought it —
+a third off the cost of a scoring step, with a confidence signal I could route
+on. It is parked because the harness I built to *check* it turned up a flaw in
+my own output that was worth twice as much to fix, and fixing that did not
+need a second model. The calibration harness and the ten rubrics stay in the
+codebase; the day the project needs a number it can trust *more* than an LLM's, that
+is where I will start.
 
-What I would tell someone doing this: measure the output before you optimise
-the model, and when a model is being lazy, do not tell it to be thorough —
-change the shape of the answer so that thoroughness is the only way to produce
-it.
+What I would tell someone doing this: **measure the output before you optimise
+the model**, and when a model is being lazy, do not tell it to be thorough —
+**change the shape of the answer so that thoroughness is the only way to produce
+it.**
 
 ## Links
 

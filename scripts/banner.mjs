@@ -27,7 +27,9 @@ const STYLE = [
   "wide cinematic 16:9 composition, a calm muted palette with one strong accent colour,",
   "slightly stylised environments with readable detail, no text, no letters, no logos,",
   "no watermark, no UI chrome. If a person appears, it is the character from the",
-  "reference image: same face, hair and glasses, drawn in this same style.",
+  "reference image — same face, glasses and beard, drawn in this same style — and",
+  "they are always wearing a hat that covers the hair completely: a bucket hat,",
+  "a ball cap, a beanie, or whatever suits the scene. Never bare-headed.",
 ].join(" ");
 
 const loadEnv = () => {
