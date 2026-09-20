@@ -7,9 +7,14 @@ export function Footer() {
         <span>
           © {new Date().getFullYear()} {site.author}
         </span>
-        <a href={site.github} className="hover:text-foreground">
-          GitHub
-        </a>
+        <span className="flex gap-4">
+          <a href={site.github} className="hover:text-foreground">
+            GitHub
+          </a>
+          <a href={site.linkedin} className="hover:text-foreground">
+            LinkedIn
+          </a>
+        </span>
       </div>
     </footer>
   );

@@ -9,7 +9,8 @@ export default function Home() {
     <>
       <section className="mb-12">
         <h1 className="text-3xl font-bold tracking-tight">{site.name}</h1>
-        <p className="mt-3 text-lg text-muted">{site.description}</p>
+        <p className="mt-1 text-muted">{site.tagline}</p>
+        <p className="mt-4 text-lg">{site.description}</p>
       </section>
       <section>
         <div className="mb-6 flex items-baseline justify-between">
