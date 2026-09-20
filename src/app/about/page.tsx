@@ -17,7 +17,7 @@ export default function About() {
     <>
       <header className="mb-10 flex items-center gap-6">
         <Image
-          src="/avatar.svg"
+          src="/avatar.webp"
           alt=""
           width={112}
           height={112}

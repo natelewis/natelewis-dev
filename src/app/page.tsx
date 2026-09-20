@@ -10,7 +10,7 @@ export default function Home() {
     <>
       <section className="mb-12 flex items-center gap-6">
         <Image
-          src="/avatar.svg"
+          src="/avatar.webp"
           alt=""
           width={96}
           height={96}
