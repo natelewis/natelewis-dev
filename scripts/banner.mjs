@@ -111,4 +111,9 @@ const source = Buffer.from(image.data, "base64");
 await sharp(source).resize(1600, 900, { fit: "cover" }).webp({ quality: 82 }).toFile(path.join(outDir, "banner.webp"));
 await sharp(source).resize(480, 270, { fit: "cover" }).webp({ quality: 80 }).toFile(path.join(outDir, "thumb.webp"));
 const size = (f) => `${Math.round(fs.statSync(path.join(outDir, f)).size / 1024)} KB`;
+// The dev server caches every rendered size of next/image on disk and answers
+// 304 against it, so a regenerated banner keeps showing the old one until the
+// cache goes. Production is a fresh container per deploy and never hits this.
+fs.rmSync(path.join(ROOT, ".next", "dev", "cache", "images"), { recursive: true, force: true });
+
 console.log(`wrote public/posts/${slug}/banner.webp (${size("banner.webp")}) and thumb.webp (${size("thumb.webp")})`);
