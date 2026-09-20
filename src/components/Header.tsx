@@ -1,0 +1,29 @@
+import Link from "next/link";
+import { site } from "@/lib/site";
+
+const nav = [
+  { href: "/blog", label: "Blog" },
+  { href: "/about", label: "About" },
+];
+
+export function Header() {
+  return (
+    <header className="border-b border-border">
+      <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-5">
+        <Link href="/" className="font-semibold tracking-tight">
+          {site.title}
+        </Link>
+        <nav className="flex gap-5 text-sm text-muted">
+          {nav.map((n) => (
+            <Link key={n.href} href={n.href} className="hover:text-foreground">
+              {n.label}
+            </Link>
+          ))}
+          <a href="/rss.xml" className="hover:text-foreground">
+            RSS
+          </a>
+        </nav>
+      </div>
+    </header>
+  );
+}

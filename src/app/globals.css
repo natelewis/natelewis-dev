@@ -1,0 +1,78 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+:root {
+  --background: #fafafa;
+  --foreground: #171717;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+  --accent: #0ea5e9;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+    --muted: #9ca3af;
+    --border: #262626;
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* Prose tweaks: use the per-post accent for links and headings anchors. */
+.prose a {
+  color: var(--accent);
+  text-decoration-color: color-mix(in srgb, var(--accent) 40%, transparent);
+}
+.prose a:hover {
+  text-decoration-color: var(--accent);
+}
+.prose :is(h1, h2, h3, h4) a {
+  color: inherit;
+  text-decoration: none;
+}
+.prose :is(h1, h2, h3, h4) a:hover::after {
+  content: " #";
+  color: var(--accent);
+}
+
+/* Shiki dual-theme: rehype-pretty-code emits --shiki-light / --shiki-dark vars. */
+.prose pre {
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--foreground) 4%, var(--background));
+}
+code[data-theme],
+code[data-theme] span {
+  color: var(--shiki-light);
+}
+@media (prefers-color-scheme: dark) {
+  code[data-theme],
+  code[data-theme] span {
+    color: var(--shiki-dark);
+  }
+}
+.prose :not(pre) > code {
+  background: color-mix(in srgb, var(--foreground) 8%, transparent);
+  padding: 0.15em 0.35em;
+  border-radius: 0.3em;
+  font-weight: 500;
+}
+.prose :not(pre) > code::before,
+.prose :not(pre) > code::after {
+  content: none;
+}
