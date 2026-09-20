@@ -1,6 +1,6 @@
 ---
 schema: 2
-title: "The CI runner had two cores. Nobody had counted."
+title: "CI from 485 s to 108 s without changing a test"
 date: "2026-09-17"
 description: "A first-pass CI had crept to eight minutes. I assumed slow tests. An agent and one afternoon of measuring found a two-core runner and a Postgres per test file."
 tldr:
