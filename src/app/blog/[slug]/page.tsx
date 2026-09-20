@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { TagList } from "@/components/TagList";
+import { Tldr } from "@/components/Tldr";
 import { formatDate, getPost, getPostSlugs } from "@/lib/posts";
 import { site } from "@/lib/site";
 
@@ -33,7 +34,9 @@ export async function generateMetadata(
       modifiedTime: post.updated ?? undefined,
       authors: [site.author],
       tags: post.tags,
-      images: post.images ? [{ url: post.images.banner, width: 1600, height: 900 }] : undefined,
+      images: post.images
+        ? [{ url: post.images.banner, width: 1600, height: 900 }]
+        : undefined,
     },
   };
 }
@@ -43,12 +46,31 @@ export default async function PostPage(props: PageProps<"/blog/[slug]">) {
   const post = await getPost(slug);
   if (!post) notFound();
 
+  // Structured data for search engines; the TL;DR doubles as the abstract.
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.description,
+    abstract: post.tldr.length ? post.tldr.join(" ") : undefined,
+    datePublished: post.date,
+    dateModified: post.updated ?? post.date,
+    author: { "@type": "Person", name: site.author, url: site.url },
+    image: post.images ? `${site.url}${post.images.banner}` : undefined,
+    keywords: post.tags.join(", "),
+    mainEntityOfPage: `${site.url}/blog/${post.slug}`,
+  };
+
   return (
     <article style={{ "--accent": post.accent } as React.CSSProperties}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {post.draft && (
         <p className="mb-6 rounded border border-accent/40 bg-accent/10 px-3 py-2 text-sm">
-          <strong>Draft.</strong> This post is unlisted — it is here for review and
-          may change before it is published.
+          <strong>Draft.</strong> This post is unlisted — it is here for review
+          and may change before it is published.
         </p>
       )}
       {post.images && (
@@ -68,13 +90,15 @@ export default async function PostPage(props: PageProps<"/blog/[slug]">) {
           {post.updated && (
             <>
               {" "}
-              · updated <time dateTime={post.updated}>{formatDate(post.updated)}</time>
+              · updated{" "}
+              <time dateTime={post.updated}>{formatDate(post.updated)}</time>
             </>
           )}{" "}
           · {post.readingMinutes} min read
         </p>
         {post.tags.length > 0 && <TagList tags={post.tags} className="mt-2" />}
       </header>
+      {post.tldr.length > 0 && <Tldr items={post.tldr} />}
       <div
         className="prose prose-neutral dark:prose-invert max-w-none"
         dangerouslySetInnerHTML={{ __html: post.html }}

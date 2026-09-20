@@ -19,7 +19,7 @@ const PUBLIC_DIR = path.join(process.cwd(), "public");
  * schema keeps rendering, and `npm run check-post` says which posts are behind
  * so they can be brought forward deliberately rather than reformatted en masse.
  */
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
 
 export type PostMeta = {
   slug: string;
@@ -28,6 +28,12 @@ export type PostMeta = {
   date: string; // ISO yyyy-mm-dd; controls ordering, and is the published date
   updated: string | null; // ISO yyyy-mm-dd when materially revised after publishing
   description: string;
+  /**
+   * Schema 2. Three to five bullets a reader can act on without reading the
+   * post: what was wrong, what fixed it, what it cost or won, the one rule.
+   * Rendered as a box under the title and used as the article's abstract.
+   */
+  tldr: string[];
   tags: string[];
   accent: string; // per-post accent colour, any CSS colour
   /**
@@ -55,13 +61,16 @@ function findImages(slug: string): PostMeta["images"] {
   if (!fs.existsSync(banner)) return null;
   return {
     banner: `/posts/${slug}/banner.webp`,
-    thumb: fs.existsSync(thumb) ? `/posts/${slug}/thumb.webp` : `/posts/${slug}/banner.webp`,
+    thumb: fs.existsSync(thumb)
+      ? `/posts/${slug}/thumb.webp`
+      : `/posts/${slug}/banner.webp`,
   };
 }
 
 const isoDate = (value: unknown): string | null => {
   if (value instanceof Date) return value.toISOString().slice(0, 10);
-  if (typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value)) return value;
+  if (typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value))
+    return value;
   return null;
 };
 
@@ -76,7 +85,10 @@ export function readMeta(file: string): PostMeta & { content: string } {
     date: isoDate(data.date) ?? "1970-01-01",
     updated: isoDate(data.updated),
     description: String(data.description ?? ""),
-    tags: Array.isArray(data.tags) ? data.tags.map((t) => String(t).toLowerCase()) : [],
+    tldr: Array.isArray(data.tldr) ? data.tldr.map(String).filter(Boolean) : [],
+    tags: Array.isArray(data.tags)
+      ? data.tags.map((t) => String(t).toLowerCase())
+      : [],
     accent: String(data.accent ?? DEFAULT_ACCENT),
     draft: Boolean(data.draft ?? false),
     banner: data.banner ? String(data.banner) : null,

@@ -35,10 +35,14 @@ const tags = (flag("tags") ?? "").split(",").map((t) => t.trim().toLowerCase()).
 const accent = flag("accent") ?? "#0ea5e9";
 
 export const TEMPLATE = `---
-schema: 1
+schema: 2
 title: "${title.replace(/"/g, '\\"')}"
 date: "${date}"
 description: ""
+tldr:
+  # 3–5 bullets a reader can use without reading on: what was wrong, what fixed it,
+  # what it cost or won (with the number), the one rule. Written last, from the post.
+  - ""
 tags: [${tags.map((t) => `"${t}"`).join(", ")}]
 accent: "${accent}"
 draft: true

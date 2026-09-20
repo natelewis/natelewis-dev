@@ -1,8 +1,14 @@
 ---
-schema: 1
+schema: 2
 title: "Jev from typesafe.ai fixed 30% of my problem. Measuring it fixed the rest."
 date: "2026-09-19"
 description: "I tried typesafe.ai's decision model to make an LLM scoring step cheaper. It would have, by a third. The harness I built to test it found the other two-thirds."
+tldr:
+  - "I tried typesafe.ai's Jev to make an LLM scoring step cheaper. It would have, by about a third, and it did what I asked."
+  - "The harness I built to evaluate it showed the real problem: the prompt made the model write all 117 answers, and 110 of them were empty."
+  - "Asking for hits only was 5× faster but dropped a third of the real scores. Telling the model to be thorough made it worse."
+  - "Giving it a skeleton of the categories to fill fixed the count: 28.2 s → 4.8 s per bill, 11,664 → 2,034 chars, same substance, zero unparsed in 100."
+  - "Measure the output before you optimise the model. Jev is parked, not because it failed."
 tags: ["civic-tech", "llm", "prompting", "ollama"]
 accent: "#f59e0b"
 draft: false
