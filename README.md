@@ -85,9 +85,12 @@ gh secret set WIF_SERVICE_ACCOUNT --body "$SA"
 gh secret set WIF_PROVIDER --body "projects/$PROJECT_NUMBER/locations/global/workloadIdentityPools/github/providers/github"
 ```
 
-After the first successful deploy, map the domain:
+After the first successful deploy, map the domain. Cloud Run requires the
+domain to be verified with Google first (one-time, via Search Console — it
+gives you a TXT record to add at the registrar):
 
 ```bash
+gcloud domains verify natelewis.dev     # opens Search Console; add the TXT record it shows
 gcloud beta run domain-mappings create --service natelewis-dev --domain natelewis.dev --region $REGION
 ```
 
