@@ -1,4 +1,5 @@
 ---
+schema: 1
 title: "Hello, world"
 date: "2026-09-20"
 description: "What this site is, and how it's put together."
@@ -21,6 +22,7 @@ That's the entire publishing workflow. Here's what the front matter looks like:
 
 ```yaml
 ---
+schema: 1
 title: "Hello, world"
 date: "2026-09-20"
 description: "What this site is, and how it's put together."

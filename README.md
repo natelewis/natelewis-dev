@@ -7,20 +7,72 @@ Workload Identity Federation — no stored service-account keys.
 
 ## Writing a post
 
-Add `content/posts/<slug>.md`:
+```bash
+npm run new-post -- <slug> --title "..." --date 2026-09-20 --tags gov-data,ai
+```
+
+That writes `content/posts/<slug>.md` from the template. The front matter:
 
 ```yaml
 ---
-title: "Post title"
-date: "2026-09-20"          # ISO date; controls ordering
-description: "One-liner shown in lists, RSS, and <meta>."
-tags: ["tag"]               # optional
-accent: "#0ea5e9"           # optional per-post accent colour
-draft: true                 # optional; drafts only render in `npm run dev`
+schema: 1                   # the front-matter version; see src/lib/posts.ts
+title: "A claim, not a topic"
+date: "2026-09-20"          # ISO; the published date, and the ordering. Backdate freely.
+updated: "2026-10-01"       # optional; only for a material revision after publishing
+description: "One sentence, ≤160 chars, shown in lists, RSS and <meta>."
+tags: ["gov-data", "ai"]    # lowercase kebab-case; reuse existing tags first
+accent: "#0ea5e9"           # per-post accent colour
+draft: true                 # unlisted until false — see below
+banner: "The scene for the banner image, in a sentence or two."
 ---
-
-Markdown body. GFM tables/footnotes, fenced code with Shiki highlighting.
 ```
+
+The body keeps the template's `##` headings — **The problem · What I tried ·
+What happened · Where it landed · Links** — so every post can be enhanced the
+same way later (a contents block, a summary on the list, related posts by tag)
+without reformatting old ones. One `###` per attempt under *What I tried*.
+GFM tables and footnotes work; fenced code is highlighted by Shiki at build time.
+
+### Banner and thumbnail
+
+```bash
+npm run banner -- <slug>            # needs GEMINI_API_KEY in .env.local (gitignored)
+```
+
+Generates `public/posts/<slug>/banner.webp` (1600×900, top of the post) and
+`thumb.webp` (480×270, beside the entry on lists) with Gemini's image model.
+The *scene* comes from the post's `banner:`; the *style* is `STYLE` in
+`scripts/banner.mjs`, one place, so the whole site is drawn the same way and
+the avatar is passed as a reference so the recurring character stays the same
+person. To change a banner, change the scene and re-run — never hand-edit the
+output, so it stays reproducible. A post with no images renders without them.
+
+### Check before it leaves the machine
+
+```bash
+npm run check-post -- <slug>        # or with no slug: every post
+```
+
+Errors (which fail the run): front matter the site cannot render, and
+anything that looks like a secret or private detail — API keys, tokens,
+`KEY=value` lines, home paths, private IPs, email addresses. Warnings: no
+banner, an empty template section, template comments left in, no external
+links, a post behind the current schema. It is a pattern scan; what is
+confidential in substance still needs a person to read it.
+
+### Drafts are unlisted, not hidden
+
+`draft: true` builds and deploys the page — `/blog/<slug>` works for anyone
+with the link — but keeps it out of the home page, `/blog`, tag pages, RSS
+and the sitemap, and adds `noindex`. That is what makes it a review link to
+pass around. It is not access control. In `npm run dev` drafts are listed
+too, so the list rendering can be checked. Set `draft: false` to publish;
+set `date` to when the work happened if it is older than today.
+
+### Tags
+
+`/tags` lists every tag on published posts with counts; `/tags/<tag>` lists
+the posts. Tags on a post and in lists link there.
 
 Commit, push to `main`, done. The URL is `/blog/<slug>`.
 
@@ -35,8 +87,8 @@ docker build -t natelewis-dev . && docker run -p 8080:8080 natelewis-dev
 
 ## Routes
 
-`/`, `/blog`, `/blog/[slug]`, `/about`, `/rss.xml`, `/sitemap.xml`, `/robots.txt` —
-all prerendered at build time.
+`/`, `/blog`, `/blog/[slug]`, `/tags`, `/tags/[tag]`, `/about`, `/rss.xml`,
+`/sitemap.xml`, `/robots.txt` — all prerendered at build time.
 
 ## One-time GCP setup
 

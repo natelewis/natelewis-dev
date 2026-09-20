@@ -4,7 +4,13 @@
 
 Personal blog. See README.md for the full picture.
 
-- Posts live in `content/posts/*.md`; front matter schema is in `src/lib/posts.ts`.
+- Posts live in `content/posts/*.md`; front matter schema is in `src/lib/posts.ts`
+  (`SCHEMA_VERSION`). Scaffold with `npm run new-post`, keep the template's `##`
+  headings, image with `npm run banner`, gate with `npm run check-post`.
+- `draft: true` is *unlisted*, not hidden: the page builds and serves, but is left
+  out of every listing, feed and sitemap and carries noindex.
+- Images are by convention at `public/posts/<slug>/{banner,thumb}.webp`; the
+  house style is `STYLE` in `scripts/banner.mjs`, never in a post.
 - Markdown → HTML happens at build time in `src/lib/posts.ts` (unified/remark/rehype + Shiki).
   There is no CMS, no database, and no client-side fetching — keep everything prerendered.
 - Site-wide constants (name, URL, description) are in `src/lib/site.ts`.

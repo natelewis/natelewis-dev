@@ -3,6 +3,7 @@ import { site } from "@/lib/site";
 
 const nav = [
   { href: "/blog", label: "Blog" },
+  { href: "/tags", label: "Tags" },
   { href: "/about", label: "About" },
 ];
 
