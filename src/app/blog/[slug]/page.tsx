@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
+import { TagList } from "@/components/TagList";
 import { formatDate, getPost, getPostSlugs } from "@/lib/posts";
 import { site } from "@/lib/site";
 
 export const dynamicParams = false;
 
+// Drafts are built too: a draft is reachable by its URL, just not listed.
 export function generateStaticParams() {
   return getPostSlugs().map((slug) => ({ slug }));
 }
@@ -18,13 +21,19 @@ export async function generateMetadata(
   return {
     title: post.title,
     description: post.description,
+    // A draft is the one page a crawler is asked to leave alone; it is also
+    // absent from the sitemap and RSS, so nothing points a crawler at it.
+    robots: post.draft ? { index: false, follow: false } : undefined,
     openGraph: {
       type: "article",
       title: post.title,
       description: post.description,
       url: `${site.url}/blog/${post.slug}`,
       publishedTime: post.date,
+      modifiedTime: post.updated ?? undefined,
       authors: [site.author],
+      tags: post.tags,
+      images: post.images ? [{ url: post.images.banner, width: 1600, height: 900 }] : undefined,
     },
   };
 }
@@ -36,13 +45,35 @@ export default async function PostPage(props: PageProps<"/blog/[slug]">) {
 
   return (
     <article style={{ "--accent": post.accent } as React.CSSProperties}>
+      {post.draft && (
+        <p className="mb-6 rounded border border-accent/40 bg-accent/10 px-3 py-2 text-sm">
+          <strong>Draft.</strong> This post is unlisted — it is here for review and
+          may change before it is published.
+        </p>
+      )}
+      {post.images && (
+        <Image
+          src={post.images.banner}
+          alt=""
+          width={1600}
+          height={900}
+          priority
+          className="mb-8 aspect-video w-full rounded-lg object-cover"
+        />
+      )}
       <header className="mb-8 border-l-2 border-accent pl-4">
         <h1 className="text-3xl font-bold tracking-tight">{post.title}</h1>
         <p className="mt-2 text-sm text-muted">
-          <time dateTime={post.date}>{formatDate(post.date)}</time> ·{" "}
-          {post.readingMinutes} min read
-          {post.tags.length > 0 && <> · {post.tags.join(", ")}</>}
+          <time dateTime={post.date}>{formatDate(post.date)}</time>
+          {post.updated && (
+            <>
+              {" "}
+              · updated <time dateTime={post.updated}>{formatDate(post.updated)}</time>
+            </>
+          )}{" "}
+          · {post.readingMinutes} min read
         </p>
+        {post.tags.length > 0 && <TagList tags={post.tags} className="mt-2" />}
       </header>
       <div
         className="prose prose-neutral dark:prose-invert max-w-none"
