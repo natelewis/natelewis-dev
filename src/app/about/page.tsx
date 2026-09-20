@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import avatar from "../../../public/avatar.webp";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -17,12 +18,14 @@ export default function About() {
     <>
       <header className="mb-10 flex items-center gap-6">
         <Image
-          src="/avatar.webp"
+          // A static import gets a content-hashed URL, so a new picture is a new URL
+          // and no browser keeps showing the old one.
+          src={avatar}
           alt=""
           width={112}
           height={112}
           priority
-          className="shrink-0 rounded-full"
+          className="shrink-0 rounded-lg object-cover"
         />
         <div className="border-l-2 border-accent pl-4">
           <h1 className="text-3xl font-bold tracking-tight">{site.name}</h1>

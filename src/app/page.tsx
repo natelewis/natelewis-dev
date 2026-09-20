@@ -1,4 +1,5 @@
 import Image from "next/image";
+import avatar from "../../public/avatar.webp";
 import Link from "next/link";
 import { PostList } from "@/components/PostList";
 import { getAllPosts } from "@/lib/posts";
@@ -8,14 +9,16 @@ export default function Home() {
   const posts = getAllPosts().slice(0, 5);
   return (
     <>
-      <section className="mb-12 flex items-center gap-6">
+      <section className="mb-12 flex items-start gap-6">
         <Image
-          src="/avatar.webp"
+          // A static import gets a content-hashed URL, so a new picture is a new URL
+          // and no browser keeps showing the old one.
+          src={avatar}
           alt=""
-          width={96}
-          height={96}
+          width={128}
+          height={128}
           priority
-          className="shrink-0 rounded-full"
+          className="shrink-0 rounded-lg object-cover"
         />
         <div>
           <h1 className="text-3xl font-bold tracking-tight">{site.name}</h1>
