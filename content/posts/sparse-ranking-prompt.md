@@ -3,17 +3,18 @@ schema: 1
 title: "The model was writing 108 empty answers per bill"
 date: "2026-09-19"
 description: "I went looking at a decision model to replace an LLM scoring step, and found the LLM was spending 95% of its output on zeros. Fixing that took three prompts."
-tags: ["congress-for-voters", "llm", "prompting", "ollama"]
+tags: ["civic-tech", "llm", "prompting", "ollama"]
 accent: "#f59e0b"
 draft: true
 banner: "A person at a desk late at night with two stacks of paper beside the laptop: a tall, teetering stack of forms where every checkbox is empty, and a short neat stack of a few pages with real writing on them. The laptop shows a bar chart with one bar six times taller than the other. Through the window behind, the Capitol dome is small and distant."
 ---
 
-[Congress For Voters](https://congressforvoters.com) scores every bill Congress
-publishes against 117 questions — "does this cut taxes for middle-income
-families?", "would veterans be better off under this?" — so a voter can see who
-a bill helps and what it costs. An LLM does the scoring: it reads the bill and
-returns a rank from −10 to 10 for each question, with a one-sentence reason.
+I have a side project that reads every bill Congress publishes and scores it
+against 117 questions — "does this cut taxes for middle-income families?",
+"would veterans be better off under this?" — so that a voter could see who a
+bill helps and what it costs without reading the bill. An LLM does the scoring:
+it reads the text and returns a rank from −10 to 10 for each question, with a
+one-sentence reason.
 
 I went into this week wanting to know whether a new kind of model could do that
 scoring cheaper. I came out having changed the prompt instead, because the
@@ -92,7 +93,7 @@ reaching — an auto-theft bill scored +1 for consumer protection "because it
 protects vehicle owners' property" — and Jev's literal reading was the more
 honest one for a voter.
 
-But Jev returns no reason, and the reason is what the site leads with. A score
+But Jev returns no reason, and the reason is the part I care about most. A score
 with no "why" is a number nobody can check. So it could only ever be half of a
 pipeline: Jev for the number, an LLM for the sentence. And the cost of the LLM
 half was exactly the 3,000 tokens of zeros I had just noticed.
@@ -207,10 +208,10 @@ me: a Caribbean security bill's +6 for international alliances.
 
 ## Where it landed
 
-V2c is in production, for both the local backfill and the cloud functions,
-since 2026-09-19. It needed no re-scoring: old and new responses derive to the
-same rows, so the change was a prompt and a docblock, not a migration. The
-first bill the drain ranked under it wrote 234 output tokens.
+V2c is what the pipeline runs now, for both the local backfill and the
+scheduled cloud jobs, since 2026-09-19. It needed no re-scoring: old and new
+responses derive to the same rows, so the change was a prompt and a docblock,
+not a migration. The first bill scored under it wrote 234 output tokens.
 
 Jev is parked. Its numbers were good and its confidence signal is real, but
 once the LLM stopped writing zeros the cost argument for a two-model pipeline
@@ -224,7 +225,6 @@ it.
 
 ## Links
 
-- [Congress For Voters](https://congressforvoters.com) — the site the scores are for
 - [typesafe.ai: Introduction to Jev](https://docs.typesafe.ai/introduction) and
   [Jev 1.13 jaggedness](https://docs.typesafe.ai/model-jaggedness/jev-1.13) — the
   honest list of what the model is bad at, which is the best page in the docs
