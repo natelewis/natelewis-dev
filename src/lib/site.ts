@@ -1,7 +1,7 @@
 export const site = {
   name: "Nate Lewis",
   title: "natelewis.dev",
-  tagline: "Senior Full-Stack Engineer",
+  tagline: "Engineer, builder, tinkerer",
   description:
     "Human craftsmanship, agentic tooling, and thirty years of building for the web. Notes on what works.",
   url: "https://natelewis.dev",
