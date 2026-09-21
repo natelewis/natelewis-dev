@@ -49,7 +49,27 @@ export type PostMeta = {
   images: { banner: string; thumb: string } | null;
 };
 
-export type Post = PostMeta & { html: string; readingMinutes: number };
+export type Heading = { id: string; text: string; level: 2 | 3 };
+export type Post = PostMeta & {
+  html: string;
+  readingMinutes: number;
+  headings: Heading[];
+};
+
+/** The h2/h3s of rendered HTML, for a table of contents. rehype-slug gave them ids. */
+function extractHeadings(html: string): Heading[] {
+  const out: Heading[] = [];
+  const re = /<h([23]) id="([^"]+)">(.*?)<\/h\1>/g;
+  for (const m of html.matchAll(re)) {
+    const text = m[3]
+      .replace(/<[^>]+>/g, "")
+      .replace(/&amp;/g, "&")
+      .replace(/&#x27;/g, "'")
+      .replace(/&quot;/g, '"');
+    out.push({ id: m[2], text, level: Number(m[1]) as 2 | 3 });
+  }
+  return out;
+}
 
 const DEFAULT_ACCENT = "#0ea5e9";
 
@@ -162,6 +182,7 @@ export async function getPost(slug: string): Promise<Post | null> {
     ...meta,
     html: String(result),
     readingMinutes: Math.max(1, Math.round(words / 220)),
+    headings: extractHeadings(String(result)),
   };
 }
 

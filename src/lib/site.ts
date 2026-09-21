@@ -8,4 +8,9 @@ export const site = {
   author: "Nate Lewis",
   github: "https://github.com/natelewis",
   linkedin: "https://www.linkedin.com/in/lewisnate",
+  /** Optional; a link appears in the footer when set. */
+  bluesky: "",
+  mastodon: "",
+  /** Google Analytics measurement id (G-…). Empty disables the tag. */
+  gaId: "",
 };

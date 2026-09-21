@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { site } from "@/lib/site";
@@ -23,13 +24,18 @@ export const metadata: Metadata = {
   },
   description: site.description,
   alternates: {
+    // "./" resolves to the current route against metadataBase: one canonical per page.
+    canonical: "./",
     types: { "application/rss+xml": `${site.url}/rss.xml` },
   },
   openGraph: {
     siteName: site.title,
     type: "website",
     url: site.url,
+    // Pages without their own image (home, about, lists) share this card.
+    images: [{ url: "/og.png", width: 1200, height: 630 }],
   },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -45,6 +51,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </main>
         <Footer />
       </body>
+      {site.gaId && <GoogleAnalytics gaId={site.gaId} />}
     </html>
   );
 }

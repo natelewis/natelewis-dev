@@ -3,6 +3,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { TagList } from "@/components/TagList";
 import { Tldr } from "@/components/Tldr";
+import { Toc } from "@/components/Toc";
 import { formatDate, getPost, getPostSlugs } from "@/lib/posts";
 import { site } from "@/lib/site";
 import { topicsForTags } from "@/lib/topics";
@@ -27,6 +28,8 @@ export async function generateMetadata(
     // absent from the sitemap and RSS, so nothing points a crawler at it.
     robots: post.draft ? { index: false, follow: false } : undefined,
     openGraph: {
+      // A nested openGraph replaces the layout's wholesale, so restate the site name.
+      siteName: site.title,
       type: "article",
       title: post.title,
       description: post.description,
@@ -37,7 +40,7 @@ export async function generateMetadata(
       tags: post.tags,
       images: post.images
         ? [{ url: post.images.banner, width: 1600, height: 900 }]
-        : undefined,
+        : [{ url: "/og.png", width: 1200, height: 630 }],
     },
   };
 }
@@ -103,6 +106,7 @@ export default async function PostPage(props: PageProps<"/blog/[slug]">) {
         {post.tags.length > 0 && <TagList tags={post.tags} className="mt-2" />}
       </header>
       {post.tldr.length > 0 && <Tldr items={post.tldr} />}
+      <Toc headings={post.headings} />
       <div
         className="prose prose-neutral dark:prose-invert max-w-none"
         dangerouslySetInnerHTML={{ __html: post.html }}
