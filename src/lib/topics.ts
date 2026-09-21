@@ -52,6 +52,13 @@ export const TOPICS: Topic[] = [
   },
 ];
 
+/**
+ * Tags that every post carries by convention. They still work as tag pages
+ * (the header glyph links there) but are left off the /tags index, where a
+ * tag with the same count as /blog says nothing.
+ */
+export const UMBRELLA_TAGS = ["software-engineering"];
+
 /** Topic keys a set of tags belongs to, for the `data-topics` attribute. */
 export function topicsForTags(tags: string[]): string {
   return TOPICS.filter((t) => t.tags.some((tag) => tags.includes(tag)))

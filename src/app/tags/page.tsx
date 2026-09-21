@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllTags } from "@/lib/posts";
+import { UMBRELLA_TAGS } from "@/lib/topics";
 
 export const metadata: Metadata = {
   title: "Tags",
@@ -8,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 export default function TagsIndex() {
-  const tags = getAllTags();
+  const tags = getAllTags().filter(({ tag }) => !UMBRELLA_TAGS.includes(tag));
   return (
     <>
       <h1 className="mb-8 text-3xl font-bold tracking-tight">Tags</h1>
