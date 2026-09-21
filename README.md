@@ -16,6 +16,7 @@ That writes `content/posts/<slug>.md` from the template. The front matter:
 ```yaml
 ---
 schema: 2                   # the front-matter version; see src/lib/posts.ts
+kind: post                  # or note; see Notes below
 title: "A claim, not a topic"
 date: "2026-09-20"          # ISO; the published date, and the ordering. Backdate freely.
 updated: "2026-10-01"       # optional; only for a material revision after publishing
@@ -36,6 +37,17 @@ What happened · Where it landed · Links** — so every post can be enhanced th
 same way later (a contents block, a summary on the list, related posts by tag)
 without reformatting old ones. One `###` per attempt under *What I tried*.
 GFM tables and footnotes work; fenced code is highlighted by Shiki at build time.
+
+### Notes
+
+```bash
+npm run new-post -- <slug> --note --title "..." --tags a,b
+```
+
+A note is one finding in a few hundred words: `kind: note` in the front
+matter, no template sections, and no banner or TL;DR asked of it. Same
+folder, same `/blog/<slug>` URL, same tags; it is listed with the posts and
+on `/notes`, labelled, and `check-post` warns past ~400 words.
 
 ### Banner and thumbnail
 

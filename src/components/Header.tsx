@@ -4,6 +4,7 @@ import { TopicMarks } from "@/components/TopicMarks";
 const nav = [
   { href: "/", label: "Home" },
   { href: "/blog", label: "Blog" },
+  { href: "/notes", label: "Notes" },
   { href: "/tags", label: "Tags" },
   { href: "/about", label: "About" },
 ];

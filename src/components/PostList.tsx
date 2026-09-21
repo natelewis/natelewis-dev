@@ -10,10 +10,16 @@ export function PostList({ posts }: { posts: PostMeta[] }) {
   return (
     <ul className="space-y-8">
       {posts.map((p) => (
-        <li key={p.slug} style={{ "--accent": p.accent } as React.CSSProperties}>
+        <li
+          key={p.slug}
+          style={{ "--accent": p.accent } as React.CSSProperties}
+        >
           <article className="flex gap-4 border-l-2 border-accent pl-4">
-            {p.images && (
-              <Link href={`/blog/${p.slug}`} className="hidden shrink-0 sm:block">
+            {p.images && p.kind === "post" && (
+              <Link
+                href={`/blog/${p.slug}`}
+                className="hidden shrink-0 sm:block"
+              >
                 <Image
                   src={p.images.thumb}
                   alt=""
@@ -28,8 +34,15 @@ export function PostList({ posts }: { posts: PostMeta[] }) {
                 <Link href={`/blog/${p.slug}`} className="hover:text-accent">
                   {p.title}
                 </Link>
+                {p.kind === "note" && (
+                  <span className="ml-2 align-middle text-xs font-normal tracking-wider text-muted">
+                    NOTE
+                  </span>
+                )}
                 {p.draft && (
-                  <span className="ml-2 align-middle text-xs font-normal text-accent">draft</span>
+                  <span className="ml-2 align-middle text-xs font-normal text-accent">
+                    draft
+                  </span>
                 )}
               </h2>
               <p className="mt-1 text-sm text-muted">

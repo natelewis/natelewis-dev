@@ -21,9 +21,18 @@ const PUBLIC_DIR = path.join(process.cwd(), "public");
  */
 export const SCHEMA_VERSION = 2;
 
+/**
+ * A post is the long form: template sections, banner, TL;DR. A note is one
+ * finding in a few hundred words, with none of that required. Same folder,
+ * same URL scheme, same tags; the kind only changes what is asked of it and
+ * how it is labelled.
+ */
+export type PostKind = "post" | "note";
+
 export type PostMeta = {
   slug: string;
   schema: number;
+  kind: PostKind;
   title: string;
   date: string; // ISO yyyy-mm-dd; controls ordering, and is the published date
   updated: string | null; // ISO yyyy-mm-dd when materially revised after publishing
@@ -101,6 +110,7 @@ export function readMeta(file: string): PostMeta & { content: string } {
   return {
     slug,
     schema: Number(data.schema ?? 0),
+    kind: data.kind === "note" ? "note" : "post",
     title: String(data.title ?? slug),
     date: isoDate(data.date) ?? "1970-01-01",
     updated: isoDate(data.updated),
@@ -153,6 +163,10 @@ export function getAllTags(): Array<{ tag: string; count: number }> {
   return [...counts]
     .map(([tag, count]) => ({ tag, count }))
     .sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag));
+}
+
+export function getPostsByKind(kind: PostKind): PostMeta[] {
+  return getAllPosts().filter((p) => p.kind === kind);
 }
 
 export function getPostsByTag(tag: string): PostMeta[] {

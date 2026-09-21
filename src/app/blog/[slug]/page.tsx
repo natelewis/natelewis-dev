@@ -93,6 +93,9 @@ export default async function PostPage(props: PageProps<"/blog/[slug]">) {
       <header className="mb-8 border-l-2 border-accent pl-4">
         <h1 className="text-3xl font-bold tracking-tight">{post.title}</h1>
         <p className="mt-2 text-sm text-muted">
+          {post.kind === "note" && (
+            <span className="mr-2 tracking-wider">NOTE ·</span>
+          )}
           <time dateTime={post.date}>{formatDate(post.date)}</time>
           {post.updated && (
             <>

@@ -71,9 +71,15 @@ for (const file of files) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(String(data.date ?? "").slice(0, 10))) report("ERROR", slug, "date must be YYYY-MM-DD");
   if (!data.description) report("ERROR", slug, "missing description (shown on the list, in RSS and in <meta>)");
   else if (String(data.description).length > 160) report("WARN", slug, `description is ${String(data.description).length} chars; 160 is the useful limit for previews`);
+  // A note is one finding in a few hundred words: no banner, TL;DR or template sections asked of it.
+  const isNote = data.kind === "note";
+  if (data.kind && !["post", "note"].includes(data.kind)) report("ERROR", slug, `kind "${data.kind}" is not post or note`);
+  const wordCount = content.replace(/```[\s\S]*?```/g, "").split(/\s+/).filter(Boolean).length;
+  if (isNote && wordCount > 400) report("WARN", slug, `note is ${wordCount} words; past ~400 it is a post`);
+
   // Schema 2: the TL;DR is what lets a reader decide in ten seconds, and what search shows.
   const tldr = Array.isArray(data.tldr) ? data.tldr.map(String).filter(Boolean) : [];
-  if (Number(data.schema ?? 0) >= 2 && tldr.length === 0) report("ERROR", slug, "missing tldr (schema 2 requires 3–4 bullets)");
+  if (Number(data.schema ?? 0) >= 2 && tldr.length === 0 && !isNote) report("ERROR", slug, "missing tldr (schema 2 requires 3–4 bullets)");
   else if (tldr.length > 0 && (tldr.length < 3 || tldr.length > 4)) report("WARN", slug, `tldr has ${tldr.length} bullets; 3–4 is the range`);
   for (const line of tldr) {
     if (line.length > 130) report("WARN", slug, `tldr bullet is ${line.length} chars; one line, under ~130: "${line.slice(0, 40)}…"`);
@@ -88,12 +94,12 @@ for (const file of files) {
 
   // Images.
   const banner = path.join(ROOT, "public", "posts", slug, "banner.webp");
-  if (!fs.existsSync(banner)) report("WARN", slug, `no banner (npm run banner -- ${slug})`);
-  else if (!data.banner) report("WARN", slug, "banner exists but front matter has no `banner:` scene, so it cannot be regenerated");
+  if (!fs.existsSync(banner) && !isNote) report("WARN", slug, `no banner (npm run banner -- ${slug})`);
+  else if (fs.existsSync(banner) && !data.banner) report("WARN", slug, "banner exists but front matter has no `banner:` scene, so it cannot be regenerated");
 
-  // Structure: the template's sections, each with something under it.
+  // Structure: the template's sections, each with something under it. Notes have no template.
   const headings = [...content.matchAll(/^## (.+)$/gm)].map((m) => m[1].trim());
-  for (const section of SECTIONS) {
+  for (const section of isNote ? [] : SECTIONS) {
     if (!headings.includes(section)) {
       report("WARN", slug, `no "## ${section}" section`);
       continue;

@@ -2,7 +2,10 @@
 /**
  * Scaffolds a post from the canonical template.
  *
- *   npm run new-post -- <slug> [--title "..."] [--date YYYY-MM-DD] [--tags a,b] [--accent "#hex"]
+ *   npm run new-post -- <slug> [--title "..."] [--date YYYY-MM-DD] [--tags a,b] [--accent "#hex"] [--note]
+ *
+ * --note scaffolds a note instead: one finding in a few hundred words, no
+ * template sections, no banner or TL;DR asked of it.
  *
  * The template is the one place the post structure is written down. Keep the
  * H2 headings as they are: they are what makes every post enhanceable the
@@ -33,6 +36,7 @@ const title = flag("title") ?? slug.replace(/-/g, " ").replace(/^\w/, (c) => c.t
 const date = flag("date") ?? new Date().toISOString().slice(0, 10);
 const tags = (flag("tags") ?? "").split(",").map((t) => t.trim().toLowerCase()).filter(Boolean);
 const accent = flag("accent") ?? "#0ea5e9";
+const isNote = args.includes("--note");
 
 export const TEMPLATE = `---
 schema: 2
@@ -74,5 +78,19 @@ banner: ""
 <!-- Sources, docs, tools and prior art referenced above. -->
 `;
 
-fs.writeFileSync(file, TEMPLATE);
+export const NOTE_TEMPLATE = `---
+schema: 2
+kind: note
+title: "${title.replace(/"/g, '\\"')}"
+date: "${date}"
+description: ""
+tags: [${tags.map((t) => `"${t}"`).join(", ")}]
+accent: "${accent}"
+draft: true
+---
+
+<!-- One finding, one number, a few hundred words. Lead with the finding. Link the source. -->
+`;
+
+fs.writeFileSync(file, isNote ? NOTE_TEMPLATE : TEMPLATE);
 console.log(`wrote content/posts/${slug}.md — fill it in, then \`npm run check-post -- ${slug}\``);
