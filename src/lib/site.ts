@@ -12,5 +12,5 @@ export const site = {
   bluesky: "",
   mastodon: "",
   /** Google Analytics measurement id (G-…). Empty disables the tag. */
-  gaId: "",
+  gaId: "G-11V6L4005E",
 };
