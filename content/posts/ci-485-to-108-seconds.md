@@ -8,7 +8,7 @@ tldr:
   - "Starting Postgres per test file was two thirds of the slow suite. One container plus template DBs: 69 s → 10.5 s."
   - "A fix worth 10% on my laptop was worth 50% on the runner. Measure on the machine that matters."
   - "485 s → 108 s. No test changed."
-tags: ["ci", "github-actions", "testing", "agents"]
+tags: ["software-engineering", "ci", "github-actions", "testing", "agents"]
 accent: "#10b981"
 draft: false
 banner: "A person sits at a small desk with a single old two-burner camp stove, and a long row of thirty-three identical pots waiting on the floor beside it, each with a lid. One pot is on the stove. Behind them on the wall, a clock face with the hands at eight minutes past."

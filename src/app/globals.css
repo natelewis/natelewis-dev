@@ -78,9 +78,9 @@ code[data-theme] span {
 }
 
 /* Header topic glyphs light up on any page whose tags fall under them.
-   The page declares its topics with data-topics="software agents" on the
+   The page declares its topics with data-topics="software-engineering agents" on the
    article (or the tag page wrapper); :has() lets the header react to it. */
-body:has([data-topics~="software"]) .topic-software,
+body:has([data-topics~="software-engineering"]) .topic-software-engineering,
 body:has([data-topics~="agents"]) .topic-agents,
 body:has([data-topics~="music"]) .topic-music,
 body:has([data-topics~="hardware"]) .topic-hardware {

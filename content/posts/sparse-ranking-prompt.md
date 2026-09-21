@@ -8,7 +8,7 @@ tldr:
   - "The harness built to test it found the real waste: 117 answers per bill, 110 of them empty."
   - "A skeleton to fill instead: 28 s → 4.8 s per bill, same substance, zero unparsed. No second model needed."
   - "Measure the output before you optimise the model."
-tags: ["civic-tech", "llm", "prompting", "ollama"]
+tags: ["software-engineering", "civic-tech", "llm", "prompting", "ollama"]
 accent: "#f59e0b"
 draft: false
 banner: "A person at a desk late at night with two stacks of paper beside the laptop: a tall, teetering stack of forms where every checkbox is empty, and a short neat stack of a few pages with real writing on them. The laptop shows a bar chart with one bar six times taller than the other. Through the window behind, the Capitol dome is small and distant."

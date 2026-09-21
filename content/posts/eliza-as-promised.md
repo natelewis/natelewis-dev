@@ -8,7 +8,7 @@ tldr:
   - "In 2026 the rules still pass their own 34 tests. A local 12B model beat them on every sentence neither had seen."
   - "Told to answer null when nothing fit, the model said stop instead, 4 times in 11. That problem just moved."
   - "I spent months on the parser and an afternoon on the loop. It was backwards."
-tags: ["agents", "llm", "ollama", "nlp"]
+tags: ["software-engineering", "agents", "llm", "ollama", "nlp"]
 accent: "#22c55e"
 draft: false
 banner: "A therapy session in a 2017 living room: the person lies on a couch with an arm over their forehead, talking, while in the therapist's armchair opposite sits an open laptop propped upright with a Raspberry Pi and a USB microphone on the seat cushion beside it; the laptop screen shows the line '>> Your laptop keeps crashing ?' and a notepad and pen rest on the chair arm, untouched."

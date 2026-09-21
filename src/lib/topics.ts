@@ -6,17 +6,17 @@
  * doesn't light anything.
  */
 export type Topic = {
-  key: "software" | "agents" | "music" | "hardware";
+  key: "software-engineering" | "agents" | "music" | "hardware";
   label: string;
   tags: string[];
 };
 
 export const TOPICS: Topic[] = [
   {
-    key: "software",
-    label: "Software",
+    key: "software-engineering",
+    label: "Software engineering",
     tags: [
-      "software",
+      "software-engineering",
       "ci",
       "github-actions",
       "testing",

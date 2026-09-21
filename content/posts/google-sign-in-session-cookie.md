@@ -8,7 +8,7 @@ tldr:
   - "One cookies() call in the root layout makes every page dynamic. Read it only where identity is needed."
   - "The agent can't click a Google popup, so it proved sign-in from the other end: mint a token, post it, verify the cookie."
   - "Open: sign-out doesn't revoke tokens, and nothing uses the identity yet."
-tags: ["nextjs", "firebase", "auth", "agents"]
+tags: ["software-engineering", "nextjs", "firebase", "auth", "agents"]
 accent: "#0ea5e9"
 draft: false
 banner: "A person in a beanie standing at a heavy wooden front door, holding it open for a visitor while looking down at a small paper ticket the visitor has handed over. Behind them, down the hall, a second locked door with a small window; the ticket is being checked against it. On the doormat, a Google-coloured four-dot pattern."

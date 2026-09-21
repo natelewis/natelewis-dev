@@ -4,7 +4,7 @@ import { TOPICS, type Topic } from "@/lib/topics";
 
 /** One glyph per topic, drawn on a 24-unit grid with a 1.75 stroke. */
 const GLYPHS: Record<Topic["key"], React.ReactNode> = {
-  software: (
+  "software-engineering": (
     <>
       <path d="M8.5 6.5 3 12l5.5 5.5" />
       <path d="M15.5 6.5 21 12l-5.5 5.5" />
