@@ -5,6 +5,7 @@ import { TagList } from "@/components/TagList";
 import { Tldr } from "@/components/Tldr";
 import { formatDate, getPost, getPostSlugs } from "@/lib/posts";
 import { site } from "@/lib/site";
+import { topicsForTags } from "@/lib/topics";
 
 export const dynamicParams = false;
 
@@ -62,7 +63,10 @@ export default async function PostPage(props: PageProps<"/blog/[slug]">) {
   };
 
   return (
-    <article style={{ "--accent": post.accent } as React.CSSProperties}>
+    <article
+      data-topics={topicsForTags(post.tags)}
+      style={{ "--accent": post.accent } as React.CSSProperties}
+    >
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
