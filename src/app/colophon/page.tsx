@@ -25,9 +25,7 @@ export default function Colophon() {
         post is about, what stays in, and whether it is worth publishing at all.
         Every number is one I measured, every claim is one I would make out
         loud, and I read the final draft as a stranger before it goes up. If
-        something reads like a person wrote it, that is because one did the
-        thinking. If something is wrong, that is on me, and I would like to
-        know.
+        something is wrong, that is on me, and I would like to know.
       </p>
       <p>
         The illustrations are generated from a scene I describe for each post,
