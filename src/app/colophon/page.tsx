@@ -1,15 +1,28 @@
 import type { Metadata } from "next";
 import { site } from "@/lib/site";
+import { JsonLd, person } from "@/components/JsonLd";
+
+const description =
+  "How this site is built, how the posts are written, and what the AI does and does not do.";
 
 export const metadata: Metadata = {
   title: "Colophon",
-  description:
-    "How this site is built, how the posts are written, and what the AI does and does not do.",
+  description,
 };
 
 export default function Colophon() {
   return (
     <div className="prose prose-neutral dark:prose-invert max-w-none">
+      <JsonLd
+        data={{
+          "@type": "WebPage",
+          name: "Colophon",
+          url: `${site.url}/colophon`,
+          description,
+          isPartOf: { "@type": "WebSite", name: site.title, url: site.url },
+          author: person,
+        }}
+      />
       <h1>Colophon</h1>
 
       <h2>How the posts are written</h2>

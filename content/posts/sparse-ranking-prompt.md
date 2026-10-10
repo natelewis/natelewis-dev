@@ -1,6 +1,7 @@
 ---
 schema: 2
 title: "Jev from typesafe.ai fixed 30% of my problem. Measuring it fixed the rest."
+seoTitle: "Making an LLM scoring step cheaper: typesafe.ai's Jev, measured"
 date: "2026-09-19"
 description: "I tried typesafe.ai's decision model to make an LLM scoring step cheaper. It would have, by a third. The harness I built to test it found the other two-thirds."
 tldr:

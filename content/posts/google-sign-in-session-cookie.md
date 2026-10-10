@@ -1,6 +1,7 @@
 ---
 schema: 2
 title: "Google sign-in is a browser event. Making it an identity is the server's job."
+seoTitle: "Google sign-in to a server identity on Next.js and Firebase"
 date: "2026-09-13"
 description: "How Google-only sign-in gets a server-verifiable identity on Next.js and Firebase: a session cookie, a static layout, and a proof that never clicks the popup."
 tldr:

@@ -68,6 +68,9 @@ for (const file of files) {
 
   // Front matter the site needs.
   if (!data.title) report("ERROR", slug, "missing title");
+  // Results pages cut a <title> near 60 characters (the page drops the site suffix past that).
+  const searchTitle = String(data.seoTitle ?? data.title ?? "");
+  if (searchTitle.length > 70) report("WARN", slug, `search title is ${searchTitle.length} chars and will be cut in results; add a shorter seoTitle (the H1 keeps title)`);
   if (!/^\d{4}-\d{2}-\d{2}$/.test(String(data.date ?? "").slice(0, 10))) report("ERROR", slug, "date must be YYYY-MM-DD");
   if (!data.description) report("ERROR", slug, "missing description (shown on the list, in RSS and in <meta>)");
   else if (String(data.description).length > 160) report("WARN", slug, `description is ${String(data.description).length} chars; 160 is the useful limit for previews`);
