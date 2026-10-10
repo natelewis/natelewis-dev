@@ -15,6 +15,17 @@ export function generateStaticParams() {
   return getPostSlugs().map((slug) => ({ slug }));
 }
 
+/**
+ * Results pages cut a <title> at roughly 60 characters. The layout appends
+ * " · natelewis.dev"; when that suffix is what pushes a title past the limit,
+ * drop it, so the cut lands on the site name rather than the post's words.
+ */
+const TITLE_LIMIT = 60;
+function searchTitle(title: string): Metadata["title"] {
+  const suffixed = `${title} · ${site.title}`;
+  return suffixed.length <= TITLE_LIMIT ? title : { absolute: title };
+}
+
 export async function generateMetadata(
   props: PageProps<"/blog/[slug]">,
 ): Promise<Metadata> {
@@ -22,7 +33,7 @@ export async function generateMetadata(
   const post = await getPost(slug);
   if (!post) return {};
   return {
-    title: post.title,
+    title: searchTitle(post.seoTitle ?? post.title),
     description: post.description,
     // A draft is the one page a crawler is asked to leave alone; it is also
     // absent from the sitemap and RSS, so nothing points a crawler at it.

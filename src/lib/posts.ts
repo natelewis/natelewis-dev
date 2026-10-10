@@ -34,6 +34,12 @@ export type PostMeta = {
   schema: number;
   kind: PostKind;
   title: string;
+  /**
+   * The search-result <title>, when the headline is too long for one. Optional;
+   * falls back to `title`. The H1, RSS, Open Graph and structured data keep
+   * `title` — this only changes what a results page shows.
+   */
+  seoTitle: string | null;
   date: string; // ISO yyyy-mm-dd; controls ordering, and is the published date
   updated: string | null; // ISO yyyy-mm-dd when materially revised after publishing
   description: string;
@@ -112,6 +118,7 @@ export function readMeta(file: string): PostMeta & { content: string } {
     schema: Number(data.schema ?? 0),
     kind: data.kind === "note" ? "note" : "post",
     title: String(data.title ?? slug),
+    seoTitle: data.seoTitle ? String(data.seoTitle) : null,
     date: isoDate(data.date) ?? "1970-01-01",
     updated: isoDate(data.updated),
     description: String(data.description ?? ""),
