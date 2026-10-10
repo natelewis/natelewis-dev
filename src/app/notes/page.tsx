@@ -6,6 +6,8 @@ import { getPostsByKind } from "@/lib/posts";
 export const metadata: Metadata = {
   title: "Notes",
   description: "Short ones: one finding, one number, a few hundred words.",
+  // An empty index is not a page worth indexing; it lists itself once a note is published.
+  ...(getPostsByKind("note").length ? {} : { robots: { index: false } }),
 };
 
 export default function NotesIndex() {

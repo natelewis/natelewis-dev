@@ -1,15 +1,16 @@
 import Link from "next/link";
 import { TopicMarks } from "@/components/TopicMarks";
-
-const nav = [
-  { href: "/", label: "Home" },
-  { href: "/blog", label: "Blog" },
-  { href: "/notes", label: "Notes" },
-  { href: "/tags", label: "Tags" },
-  { href: "/about", label: "About" },
-];
+import { getPostsByKind } from "@/lib/posts";
 
 export function Header() {
+  // Notes appears once there is a published note to show, not as an empty page.
+  const nav = [
+    { href: "/", label: "Home" },
+    { href: "/blog", label: "Blog" },
+    ...(getPostsByKind("note").length ? [{ href: "/notes", label: "Notes" }] : []),
+    { href: "/tags", label: "Tags" },
+    { href: "/about", label: "About" },
+  ];
   return (
     <header className="border-b border-border">
       <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-5">

@@ -6,7 +6,7 @@ date: "2026-09-21"
 description: "Nine Jest configs became one root config with projects, and coverage dropped to 0% for every package. The glob was matching from the wrong root."
 tags: ["software-engineering", "testing", "ci"]
 accent: "#10b981"
-draft: false
+draft: true
 ---
 
 While [cutting a CI run from 485 s to 108 s](/blog/ci-485-to-108-seconds),
