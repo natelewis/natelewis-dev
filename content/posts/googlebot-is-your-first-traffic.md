@@ -10,15 +10,9 @@ tldr:
   - "Re-run it after a deploy and you see the fix land the same day, not weeks later in Search Console."
 tags: ["software-engineering", "civic-tech", "agents", "seo"]
 accent: "#16a34a"
-draft: true
+draft: false
 banner: "A person in a ball cap stands at a server rack at night, holding a clipboard, while a long line of identical small robots with spider legs queues out of the rack's open door and down a corridor. Most of the robots have wandered into a side room full of identical doors labelled with filters, and only a few are walking through the main door."
 ---
-
-<!--
-Who: someone who just launched a site with no audience yet and has no signal about whether it works.
-Leave with: Googlebot's requests in your own request logs, grouped by section, are a daily load test and a monitor.
-Turn: the busiest "user" of a site nobody visits is the crawler, and it was being served broken pages nobody else would have seen for weeks.
--->
 
 [Congress For Voters](https://congressforvoters.com) went public on 2
 October with about 29,000 generated pages and no audience. Analytics was

@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import avatar from "../../../public/avatar.webp";
 import { site } from "@/lib/site";
+import { JsonLd, person } from "@/components/JsonLd";
 
 export const metadata: Metadata = {
   title: "About",
-  description: `About ${site.name} — ${site.tagline}.`,
+  description:
+    "Nate Lewis is an engineer, builder and tinkerer, working on software, AI agents, music and hardware.",
 };
 
 const links = [
@@ -16,6 +18,13 @@ const links = [
 export default function About() {
   return (
     <>
+      <JsonLd
+        data={{
+          "@type": "AboutPage",
+          url: `${site.url}/about`,
+          mainEntity: person,
+        }}
+      />
       <header className="mb-10 flex items-center gap-6">
         <Image
           // A static import gets a content-hashed URL, so a new picture is a new URL

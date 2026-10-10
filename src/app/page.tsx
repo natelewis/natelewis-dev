@@ -5,6 +5,7 @@ import { PostList } from "@/components/PostList";
 import { getAllPosts } from "@/lib/posts";
 import type { Metadata } from "next";
 import { site } from "@/lib/site";
+import { JsonLd, person } from "@/components/JsonLd";
 
 // The layout's default ("natelewis.dev") names the domain and nothing else; in a
 // search result the home page should say whose site it is and what it covers.
@@ -16,6 +17,15 @@ export default function Home() {
   const posts = getAllPosts().slice(0, 5);
   return (
     <>
+      <JsonLd
+        data={{
+          "@type": "WebSite",
+          name: site.title,
+          url: site.url,
+          description: site.description,
+          author: person,
+        }}
+      />
       <section className="mb-12 flex items-start gap-6">
         <Image
           // A static import gets a content-hashed URL, so a new picture is a new URL
