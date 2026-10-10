@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getAllPosts } from "@/lib/posts";
+import { getAllPosts, getPostsByKind } from "@/lib/posts";
 import { site } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -10,7 +10,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     { url: site.url, lastModified: new Date() },
     { url: `${site.url}/blog`, lastModified: new Date() },
-    { url: `${site.url}/notes`, lastModified: new Date() },
+    ...(getPostsByKind("note").length ? [{ url: `${site.url}/notes`, lastModified: new Date() }] : []),
     { url: `${site.url}/about` },
     { url: `${site.url}/colophon` },
     { url: `${site.url}/tags` },
