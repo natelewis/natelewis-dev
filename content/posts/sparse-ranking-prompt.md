@@ -14,7 +14,7 @@ draft: false
 banner: "A person at a desk late at night with two stacks of paper beside the laptop: a tall, teetering stack of forms where every checkbox is empty, and a short neat stack of a few pages with real writing on them. The laptop shows a bar chart with one bar six times taller than the other. Through the window behind, the Capitol dome is small and distant."
 ---
 
-I have a side project that reads every bill Congress publishes and scores it
+I built [Congress For Voters](https://congressforvoters.com), which reads every bill Congress publishes and scores it
 against 117 questions — "does this cut taxes for middle-income families?",
 "would veterans be better off under this?" — so that a voter could see who a
 bill helps and what it costs without reading the bill. An LLM does the scoring:
@@ -241,6 +241,7 @@ it.**
 
 ## Links
 
+- [Congress For Voters](https://congressforvoters.com), the site whose scoring step this is about
 - [typesafe.ai: Introduction to Jev](https://docs.typesafe.ai/introduction) and
   [Jev 1.13 jaggedness](https://docs.typesafe.ai/model-jaggedness/jev-1.13) — the
   honest list of what the model is bad at, which is the best page in the docs
