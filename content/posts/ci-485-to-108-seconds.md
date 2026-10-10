@@ -4,10 +4,10 @@ title: "CI from 485 s to 108 s without changing a test"
 date: "2026-09-17"
 description: "A first-pass CI had crept to eight minutes. I assumed slow tests. An agent and one afternoon of measuring found a two-core runner and a Postgres per test file."
 tldr:
-  - "Private-repo GitHub runners have two cores. Jest had been running on one worker for months."
-  - "Starting Postgres per test file was two thirds of the slow suite. One container plus template DBs: 69 s → 10.5 s."
-  - "A fix worth 10% on my laptop was worth 50% on the runner. Measure on the machine that matters."
-  - "485 s → 108 s. No test changed."
+  - "My project's automated test run (CI) on GitHub had crept up to eight minutes, and I assumed the tests were slow."
+  - "They weren't. GitHub's machines have two CPU cores, and the tests had been using only one of them for months."
+  - "Starting a fresh database for every test file was two thirds of the slowest suite; sharing one cut it from 69 s to 10.5 s."
+  - "The whole run went from 485 s to 108 s without changing a test, and measuring on GitHub's machines, not my laptop, found it."
 tags: ["software-engineering", "ci", "github-actions", "testing", "agents"]
 accent: "#10b981"
 draft: false

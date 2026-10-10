@@ -4,10 +4,10 @@ title: "Jev from typesafe.ai fixed 30% of my problem. Measuring it fixed the res
 date: "2026-09-19"
 description: "I tried typesafe.ai's decision model to make an LLM scoring step cheaper. It would have, by a third. The harness I built to test it found the other two-thirds."
 tldr:
-  - "I tried a decision model to make LLM scoring cheaper. It worked: a third off."
-  - "The harness built to test it found the real waste: 117 answers per bill, 110 of them empty."
-  - "A skeleton to fill instead: 28 s → 4.8 s per bill, same substance, zero unparsed. No second model needed."
-  - "Measure the output before you optimise the model."
+  - "An AI model scores every bill in Congress on 117 questions for my site, and I wanted that to be cheaper and faster."
+  - "A specialised scoring model from typesafe.ai would have cut the cost by about a third."
+  - "Measuring it showed the real waste: the AI wrote out all 117 answers per bill when about 110 were blank."
+  - "Asking for only the answers that matter took each bill from 28 s to 4.8 s to score, without a second model."
 tags: ["software-engineering", "civic-tech", "llm", "prompting", "ollama"]
 accent: "#f59e0b"
 draft: false
