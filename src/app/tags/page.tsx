@@ -5,7 +5,8 @@ import { UMBRELLA_TAGS } from "@/lib/topics";
 
 export const metadata: Metadata = {
   title: "Tags",
-  description: "Posts by topic.",
+  description:
+    "Posts by topic: agents, LLMs, prompting, ollama, CI, testing, Next.js, Firebase, auth and more.",
 };
 
 export default function TagsIndex() {
