@@ -4,10 +4,10 @@ title: "Before a site has visitors, Googlebot is its traffic"
 date: "2026-10-09"
 description: "A new site has no users to tell you what's broken. Googlebot visits every day. Its requests in your server logs are the monitoring you don't have yet."
 tldr:
-  - "A new site has no visitors, but Googlebot fetches thousands of its pages a day."
-  - "Group its requests from your logs by section: count, distinct pages, query strings, errors, p90, tiny 200s."
-  - "That caught real pages served as \"not found\" and 95% of a section's crawl wasted on filter links."
-  - "Re-run it after a deploy and you see the fix land the same day, not weeks later in Search Console."
+  - "A brand-new site has no visitors to tell you what's broken, but Googlebot crawls thousands of its pages a day."
+  - "Every one of those visits is already in your server logs, so I grouped them by section of the site and watched them."
+  - "That showed real pages being served as \"not found\", and 95% of one section's crawl wasted on filter links."
+  - "After each fix, the logs showed the result the same day, instead of weeks later in Google Search Console."
 tags: ["software-engineering", "civic-tech", "agents", "seo"]
 accent: "#16a34a"
 draft: false

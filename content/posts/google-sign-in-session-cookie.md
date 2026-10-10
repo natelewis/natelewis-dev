@@ -4,10 +4,10 @@ title: "Google sign-in is a browser event. Making it an identity is the server's
 date: "2026-09-13"
 description: "How Google-only sign-in gets a server-verifiable identity on Next.js and Firebase: a session cookie, a static layout, and a proof that never clicks the popup."
 tldr:
-  - "A Google sign-in is a browser event. The server knows nothing until a route handler trades the ID token for a session cookie."
-  - "One cookies() call in the root layout makes every page dynamic. Read it only where identity is needed."
-  - "The agent can't click a Google popup, so it proved sign-in from the other end: mint a token, post it, verify the cookie."
-  - "Open: sign-out doesn't revoke tokens, and nothing uses the identity yet."
+  - "Signing in with Google happens in the browser, so the server has no idea who you are until something tells it."
+  - "The fix: the server swaps Google's short-lived token for its own session cookie, which any page can check."
+  - "Reading that cookie in the layout every page shares would stop the site caching pages, so only pages that need it read it."
+  - "An AI agent can't click Google's sign-in popup, so it tested sign-in from the server's side instead."
 tags: ["software-engineering", "nextjs", "firebase", "auth", "agents"]
 accent: "#0ea5e9"
 draft: false

@@ -4,10 +4,10 @@ title: "In 2017 I wrapped a 1966 chatbot in a Promise and called it AI"
 date: "2026-09-05"
 description: "Two npm modules from 2017–18: a 1966 chatbot behind a Promise, and an intent parser with 34 tests. I ran them again in 2026 next to a local model."
 tldr:
-  - "In 2017 I built a voice assistant on a Pi: a 1966 chatbot and eleven regex rules where the model goes now."
-  - "In 2026 the rules still pass their own 34 tests. A local 12B model beat them on every sentence neither had seen."
-  - "Told to answer null when nothing fit, the model said stop instead, 4 times in 11. That problem just moved."
-  - "I spent months on the parser and an afternoon on the loop. It was backwards."
+  - "In 2017 I built a voice assistant on a Raspberry Pi, with eleven hand-written rules to work out what each request meant."
+  - "Rerun in 2026, the rules still pass all 34 of their old tests, but a small AI model running at home handled new sentences better."
+  - "Told to answer \"none\" when no command fit, the model guessed \"stop\" in 4 of 11 cases, so that problem moved rather than went away."
+  - "The part I built in an afternoon, a loop that asks for missing details and then acts, is how today's AI agents work."
 tags: ["software-engineering", "agents", "llm", "ollama", "nlp"]
 accent: "#22c55e"
 draft: false
