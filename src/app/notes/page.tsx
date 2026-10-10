@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { PostList } from "@/components/PostList";
 import { getPostsByKind } from "@/lib/posts";
 
@@ -14,9 +15,9 @@ export default function NotesIndex() {
       <p className="mb-8 text-muted">
         Short ones. One finding, one number, a few hundred words. The long posts
         are on the{" "}
-        <a href="/blog" className="text-accent hover:underline">
+        <Link href="/blog" className="text-accent hover:underline">
           blog
-        </a>
+        </Link>
         .
       </p>
       <PostList posts={getPostsByKind("note")} />
