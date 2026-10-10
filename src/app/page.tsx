@@ -3,7 +3,14 @@ import avatar from "../../public/avatar.webp";
 import Link from "next/link";
 import { PostList } from "@/components/PostList";
 import { getAllPosts } from "@/lib/posts";
+import type { Metadata } from "next";
 import { site } from "@/lib/site";
+
+// The layout's default ("natelewis.dev") names the domain and nothing else; in a
+// search result the home page should say whose site it is and what it covers.
+export const metadata: Metadata = {
+  title: { absolute: "Nate Lewis: software, agents, music and hardware" },
+};
 
 export default function Home() {
   const posts = getAllPosts().slice(0, 5);
