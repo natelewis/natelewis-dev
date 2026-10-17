@@ -51,6 +51,15 @@ body {
   color: var(--accent);
 }
 
+/* Photographs in the body of a post. A portrait shot would otherwise run the
+   full width of the column and push everything else off the screen. */
+.prose img {
+  border-radius: 0.5rem;
+  margin-inline: auto;
+  max-height: 30rem;
+  width: auto;
+}
+
 /* Shiki dual-theme: rehype-pretty-code emits --shiki-light / --shiki-dark vars. */
 .prose pre {
   border: 1px solid var(--border);
@@ -83,6 +92,7 @@ code[data-theme] span {
 body:has([data-topics~="software-engineering"]) .topic-software-engineering,
 body:has([data-topics~="agents"]) .topic-agents,
 body:has([data-topics~="music"]) .topic-music,
-body:has([data-topics~="hardware"]) .topic-hardware {
+body:has([data-topics~="hardware"]) .topic-hardware,
+body:has([data-topics~="tacos"]) .topic-tacos {
   color: var(--accent);
 }

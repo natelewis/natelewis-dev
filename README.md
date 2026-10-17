@@ -11,12 +11,12 @@ Workload Identity Federation — no stored service-account keys.
 npm run new-post -- <slug> --title "..." --date 2026-09-20 --tags gov-data,ai
 ```
 
-That writes `content/posts/<slug>.md` from the template. The front matter:
+That writes `content/posts/<slug>.md`. The front matter:
 
 ```yaml
 ---
 schema: 2                   # the front-matter version; see src/lib/posts.ts
-kind: post                  # or note; see Notes below
+kind: post                  # or review; see Reviews below
 title: "A claim, not a topic"
 date: "2026-09-20"          # ISO; the published date, and the ordering. Backdate freely.
 updated: "2026-10-01"       # optional; only for a material revision after publishing
@@ -29,25 +29,56 @@ tags: ["gov-data", "ai"]    # lowercase kebab-case; reuse existing tags first
 accent: "#0ea5e9"           # per-post accent colour
 draft: true                 # unlisted until false — see below
 banner: "The scene for the banner image, in a sentence or two."
+imageCredit: "Photographs: …"      # when the pictures are someone else's
+imageCreditUrl: "https://…"        # linked under the banner
 ---
 ```
 
-The body keeps the template's `##` headings — **The problem · What I tried ·
-What happened · Where it landed · Links** — so every post can be enhanced the
-same way later (a contents block, a summary on the list, related posts by tag)
-without reformatting old ones. One `###` per attempt under *What I tried*.
-GFM tables and footnotes work; fenced code is highlighted by Shiki at build time.
+### Shape
 
-### Notes
+The front matter is fixed; the body is not. **A post is written in whatever
+shape its story has**, with its own `##` headings — that is what
+`--shape free`, the default, scaffolds. Nothing downstream depends on a
+particular heading: the contents block, the lists and the feeds are built from
+whatever headings a post has. Two other shapes are there when they fit:
 
 ```bash
-npm run new-post -- <slug> --note --title "..." --tags a,b
+npm run new-post -- <slug> --shape walkthrough   # The problem · What I tried · What
+                                                 # happened · Where it landed · Links
+npm run new-post -- <slug> --shape review        # a place: the visit, then ## The
+                                                 # verdict and ## Where
 ```
 
-A note is one finding in a few hundred words: `kind: note` in the front
-matter, no template sections, and no banner or TL;DR asked of it. Same
-folder, same `/blog/<slug>` URL, same tags; it is listed with the posts and
-on `/notes`, labelled, and `check-post` warns past ~400 words.
+`check-post` does not ask every post to be the same. It asks that a post have
+headings, that no heading be empty, and — when a post is clearly using the
+walkthrough sections — that it use all of them rather than half.
+GFM tables and footnotes work; fenced code is highlighted by Shiki at build time.
+
+### Reviews
+
+```bash
+npm run new-post -- <slug> --shape review --title "..." --tags tacos,food
+```
+
+A review is somewhere I went or something I used. `kind: review` in the front
+matter, and **a scorecard instead of a TL;DR**:
+
+```yaml
+kind: review
+reviewOf: "Mexica Burrito Grill"   # the thing itself; drives the structured data
+reviewOfType: "Restaurant"         # any schema.org type: Product, Book, LocalBusiness…
+reviewOfUrl: "https://…"
+rating:
+  - aspect: "The tacos"            # 3–6 of them, named for this thing in particular
+    stars: 4.5                     # out of five, in halves
+    note: "Flour, ground beef with real seasoning in it"
+```
+
+The box under the title shows each aspect with its stars and the **overall,
+which is the mean of the rows** — no field to set, so it cannot disagree with
+them. The score also goes out as schema.org `Review` structured data, and the
+entry on a list carries its stars. Reviews are listed with everything else, on
+`/reviews`, and labelled; they end with `## The verdict` and `## Where`.
 
 ### Banner and thumbnail
 
@@ -63,6 +94,23 @@ the avatar is passed as a reference so the recurring character stays the same
 person. To change a banner, change the scene and re-run — never hand-edit the
 output, so it stays reproducible. A post with no images renders without them.
 
+Every post is illustrated this way, including the ones about a place — the
+scene is built from what the place looks like, not from its own photographs.
+For pictures taken by hand, there is a second route:
+
+```bash
+npm run photo -- <slug> --banner <url|path> [--thumb <url|path>] \
+                        [--in name=<url|path>] [--position attention]
+npm run photo -- <slug>             # rebuild from the sources it remembered
+```
+
+Same output files, so nothing downstream knows the difference, plus any `--in`
+images at 1200 wide for the body (`/posts/<slug>/<name>.webp`). The sources are
+recorded in `public/posts/<slug>/photos.json` so the images can be rebuilt, the
+way a generated banner keeps its scene. Pictures that are not yours want
+`imageCredit` and `imageCreditUrl`, which render as a credit line under the
+banner; `check-post` asks for one when a source came off the web.
+
 ### Check before it leaves the machine
 
 ```bash
@@ -72,9 +120,10 @@ npm run check-post -- <slug>        # or with no slug: every post
 Errors (which fail the run): front matter the site cannot render, and
 anything that looks like a secret or private detail — API keys, tokens,
 `KEY=value` lines, home paths, private IPs, email addresses. Warnings: no
-banner, an empty template section, template comments left in, no external
-links, a post behind the current schema. It is a pattern scan; what is
-confidential in substance still needs a person to read it.
+banner, a section with nothing under it, a half-used walkthrough shape,
+template comments left in, no external links, a post behind the current
+schema. It is a pattern scan; what is confidential in substance still needs a
+person to read it.
 
 ### Drafts are unlisted, not hidden
 

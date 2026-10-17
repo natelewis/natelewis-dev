@@ -84,7 +84,8 @@ export default function About() {
 
         <p>
           Away from the keyboard, I spend my time with my family, making music,
-          singing karaoke, and working on hardware projects.
+          singing karaoke, working on hardware projects, and eating my way
+          through the taquerias north of Boston.
         </p>
       </div>
     </>

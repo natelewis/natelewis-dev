@@ -10,7 +10,7 @@ import { JsonLd, person } from "@/components/JsonLd";
 // The layout's default ("natelewis.dev") names the domain and nothing else; in a
 // search result the home page should say whose site it is and what it covers.
 export const metadata: Metadata = {
-  title: { absolute: "Nate Lewis: software, agents, music and hardware" },
+  title: { absolute: "Nate Lewis: software, agents, music, hardware and tacos" },
 };
 
 export default function Home() {

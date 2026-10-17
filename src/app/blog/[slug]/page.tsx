@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { JsonLd, person } from "@/components/JsonLd";
+import { Rating } from "@/components/Rating";
 import { TagList } from "@/components/TagList";
 import { Tldr } from "@/components/Tldr";
 import { Toc } from "@/components/Toc";
-import { formatDate, getPost, getPostSlugs } from "@/lib/posts";
+import { formatDate, getPost, getPostSlugs, overallStars } from "@/lib/posts";
 import { site } from "@/lib/site";
 import { topicsForTags } from "@/lib/topics";
 
@@ -61,6 +63,31 @@ export default async function PostPage(props: PageProps<"/blog/[slug]">) {
   const post = await getPost(slug);
   if (!post) notFound();
 
+  // A review says so in its own structured data, with the score the box shows.
+  const overall = overallStars(post.rating);
+  const reviewLd =
+    post.kind === "review" && overall !== null && post.reviewOf
+      ? {
+          "@type": "Review",
+          name: post.title,
+          itemReviewed: {
+            "@type": post.reviewOf.type,
+            name: post.reviewOf.name,
+            ...(post.reviewOf.url ? { url: post.reviewOf.url } : {}),
+          },
+          reviewRating: {
+            "@type": "Rating",
+            ratingValue: overall,
+            bestRating: 5,
+            worstRating: 1,
+          },
+          reviewBody: post.description,
+          author: person,
+          datePublished: post.date,
+          url: `${site.url}/blog/${post.slug}`,
+        }
+      : null;
+
   // Structured data for search engines; the TL;DR doubles as the abstract.
   const jsonLd = {
     "@context": "https://schema.org",
@@ -85,6 +112,7 @@ export default async function PostPage(props: PageProps<"/blog/[slug]">) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      {reviewLd && <JsonLd data={reviewLd} />}
       {post.draft && (
         <p className="mb-6 rounded border border-accent/40 bg-accent/10 px-3 py-2 text-sm">
           <strong>Draft.</strong> This post is unlisted — it is here for review
@@ -92,20 +120,39 @@ export default async function PostPage(props: PageProps<"/blog/[slug]">) {
         </p>
       )}
       {post.images && (
-        <Image
-          src={post.images.banner}
-          alt=""
-          width={1600}
-          height={900}
-          priority
-          className="mb-8 aspect-video w-full rounded-lg object-cover"
-        />
+        <figure className="mb-8">
+          <Image
+            src={post.images.banner}
+            alt=""
+            width={1600}
+            height={900}
+            priority
+            className="aspect-video w-full rounded-lg object-cover"
+          />
+          {post.imageCredit && (
+            <figcaption className="mt-2 text-xs text-muted">
+              {post.imageCredit.href ? (
+                <a
+                  href={post.imageCredit.href}
+                  rel="nofollow"
+                  className="hover:text-foreground"
+                >
+                  {post.imageCredit.text}
+                </a>
+              ) : (
+                post.imageCredit.text
+              )}
+            </figcaption>
+          )}
+        </figure>
       )}
       <header className="mb-8 border-l-2 border-accent pl-4">
         <h1 className="text-3xl font-bold tracking-tight">{post.title}</h1>
         <p className="mt-2 text-sm text-muted">
-          {post.kind === "note" && (
-            <span className="mr-2 tracking-wider">NOTE ·</span>
+          {post.kind !== "post" && (
+            <span className="mr-2 tracking-wider">
+              {post.kind.toUpperCase()} ·
+            </span>
           )}
           <time dateTime={post.date}>{formatDate(post.date)}</time>
           {post.updated && (
@@ -119,6 +166,7 @@ export default async function PostPage(props: PageProps<"/blog/[slug]">) {
         </p>
         {post.tags.length > 0 && <TagList tags={post.tags} className="mt-2" />}
       </header>
+      {post.rating.length > 0 && <Rating rating={post.rating} />}
       {post.tldr.length > 0 && <Tldr items={post.tldr} />}
       <Toc headings={post.headings} />
       <div
