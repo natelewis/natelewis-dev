@@ -65,26 +65,41 @@ const GLYPHS: Record<Topic["key"], React.ReactNode> = {
       <path d="M9.5 7V4M12 7V4M14.5 7V4M9.5 17v3M12 17v3M14.5 17v3M7 9.5H4M7 12H4M7 14.5H4M17 9.5h3M17 12h3M17 14.5h3" />
     </>
   ),
+  tacos: (
+    <>
+      <g transform="rotate(-14 12 12)">
+        <path d="M3 9.5c0 4.97 4.03 9 9 9s9-4.03 9-9z" />
+        <path d="M4.5 9.5a2.9 2.9 0 0 1 5.8 0" />
+        <path d="M9.1 9.5a2.9 2.9 0 0 1 5.8 0" />
+        <path d="M13.7 9.5a2.9 2.9 0 0 1 5.8 0" />
+      </g>
+    </>
+  ),
 };
 
 /**
- * The header mark: the four topics as glyphs. Each links to the topic's
- * busiest existing tag page (or /tags if none of its tags has a post yet),
- * and lights up on any page whose tags fall under it — see the
- * `body:has([data-topics~=…])` rules in globals.css.
+ * The header mark: one glyph per topic that has something published under it.
+ * A topic with no posts yet is left out rather than shown as a glyph leading
+ * nowhere. Each links to the topic's busiest tag page, and lights up on any
+ * page whose tags fall under it — see the `body:has([data-topics~=…])` rules
+ * in globals.css.
  */
 export function TopicMarks() {
   const counts = new Map(getAllTags().map(({ tag, count }) => [tag, count]));
+  const marks = TOPICS.map((topic) => ({
+    topic,
+    best: topic.tags
+      .filter((t) => counts.has(t))
+      .sort((a, b) => (counts.get(b) ?? 0) - (counts.get(a) ?? 0))[0],
+  })).filter((m) => m.best);
+  if (marks.length === 0) return null;
   return (
     <div className="flex items-center gap-3" aria-label="Topics">
-      {TOPICS.map((topic) => {
-        const best = topic.tags
-          .filter((t) => counts.has(t))
-          .sort((a, b) => (counts.get(b) ?? 0) - (counts.get(a) ?? 0))[0];
+      {marks.map(({ topic, best }) => {
         return (
           <Link
             key={topic.key}
-            href={best ? `/tags/${best}` : "/tags"}
+            href={`/tags/${best}`}
             title={topic.label}
             aria-label={topic.label}
             className={`topic topic-${topic.key} text-muted transition-colors hover:text-foreground`}

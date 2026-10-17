@@ -22,12 +22,52 @@ const PUBLIC_DIR = path.join(process.cwd(), "public");
 export const SCHEMA_VERSION = 2;
 
 /**
- * A post is the long form: template sections, banner, TL;DR. A note is one
- * finding in a few hundred words, with none of that required. Same folder,
- * same URL scheme, same tags; the kind only changes what is asked of it and
- * how it is labelled.
+ * A post is the usual thing: a banner, a TL;DR, and whatever headings the
+ * story wants — long or short, the shape is the writer's. A review is
+ * somewhere I went or something I used, scored out of five on the parts of it
+ * that mattered, and its card of stars does the job the TL;DR does on a post.
+ * Same folder, same URL scheme, same tags; the kind only changes what is
+ * asked of it and how it is labelled.
  */
-export type PostKind = "post" | "note";
+export type PostKind = "post" | "review";
+
+/** One scored part of a review: "The tacos", 4.5, and a few words on why. */
+export type RatingAspect = {
+  aspect: string;
+  stars: number;
+  note: string | null;
+};
+
+/** Stars are out of five, in halves; anything else is rounded to the nearest half. */
+const toStars = (value: unknown): number => {
+  const n = Number(value);
+  if (!Number.isFinite(n)) return 0;
+  return Math.min(5, Math.max(0, Math.round(n * 2) / 2));
+};
+
+function readRating(value: unknown): RatingAspect[] {
+  if (!Array.isArray(value)) return [];
+  return value
+    .map((row) => {
+      const r = row as Record<string, unknown>;
+      return {
+        aspect: String(r?.aspect ?? "").trim(),
+        stars: toStars(r?.stars),
+        note: r?.note ? String(r.note) : null,
+      };
+    })
+    .filter((r) => r.aspect);
+}
+
+/**
+ * The headline score: the mean of the aspects, to one decimal. It is not a
+ * field anyone sets, so it can never disagree with the rows above it.
+ */
+export function overallStars(rating: RatingAspect[]): number | null {
+  if (rating.length === 0) return null;
+  const mean = rating.reduce((sum, r) => sum + r.stars, 0) / rating.length;
+  return Math.round(mean * 10) / 10;
+}
 
 export type PostMeta = {
   slug: string;
@@ -54,8 +94,19 @@ export type PostMeta = {
   draft: boolean;
   /** The scene the banner was generated from; the style lives in scripts/banner.mjs. */
   banner: string | null;
+  /**
+   * Whose pictures these are, when they were not generated here: a line under
+   * the banner, optionally linked. From `imageCredit` and `imageCreditUrl` in
+   * the front matter. A post illustrated with someone else's photographs — a
+   * restaurant's own, say — says so on the page.
+   */
+  imageCredit: { text: string; href: string | null } | null;
   /** Public URLs of the banner and its thumbnail, when the files exist. */
   images: { banner: string; thumb: string } | null;
+  /** A review's scores, in the order they are written. Empty for anything else. */
+  rating: RatingAspect[];
+  /** What a review is of, for the structured data: a name, and what kind of thing it is. */
+  reviewOf: { name: string; type: string; url: string | null } | null;
 };
 
 export type Heading = { id: string; text: string; level: 2 | 3 };
@@ -110,7 +161,7 @@ export function readMeta(file: string): PostMeta & { content: string } {
   return {
     slug,
     schema: Number(data.schema ?? 0),
-    kind: data.kind === "note" ? "note" : "post",
+    kind: data.kind === "review" ? "review" : "post",
     title: String(data.title ?? slug),
     date: isoDate(data.date) ?? "1970-01-01",
     updated: isoDate(data.updated),
@@ -122,7 +173,22 @@ export function readMeta(file: string): PostMeta & { content: string } {
     accent: String(data.accent ?? DEFAULT_ACCENT),
     draft: Boolean(data.draft ?? false),
     banner: data.banner ? String(data.banner) : null,
+    imageCredit: data.imageCredit
+      ? {
+          text: String(data.imageCredit),
+          href: data.imageCreditUrl ? String(data.imageCreditUrl) : null,
+        }
+      : null,
     images: findImages(slug),
+    rating: readRating(data.rating),
+    reviewOf: data.reviewOf
+      ? {
+          name: String(data.reviewOf),
+          // schema.org types: Restaurant, LocalBusiness, Product, Book, Movie…
+          type: String(data.reviewOfType ?? "LocalBusiness"),
+          url: data.reviewOfUrl ? String(data.reviewOfUrl) : null,
+        }
+      : null,
     content,
   };
 }

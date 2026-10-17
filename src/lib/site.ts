@@ -3,7 +3,7 @@ export const site = {
   title: "natelewis.dev",
   tagline: "Engineer, builder, tinkerer",
   description:
-    "Software, agents, music, and hardware. Notes on what I'm building and what I've learned.",
+    "Software, agents, music, hardware, and the tacos I find. Notes on what I'm building and what I've learned.",
   url: "https://natelewis.dev",
   author: "Nate Lewis",
   github: "https://github.com/natelewis",

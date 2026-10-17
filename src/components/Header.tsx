@@ -3,11 +3,13 @@ import { TopicMarks } from "@/components/TopicMarks";
 import { getPostsByKind } from "@/lib/posts";
 
 export function Header() {
-  // Notes appears once there is a published note to show, not as an empty page.
+  // Reviews appears once there is one published to show, not as an empty page.
   const nav = [
     { href: "/", label: "Home" },
     { href: "/blog", label: "Blog" },
-    ...(getPostsByKind("note").length ? [{ href: "/notes", label: "Notes" }] : []),
+    ...(getPostsByKind("review").length
+      ? [{ href: "/reviews", label: "Reviews" }]
+      : []),
     { href: "/tags", label: "Tags" },
     { href: "/about", label: "About" },
   ];

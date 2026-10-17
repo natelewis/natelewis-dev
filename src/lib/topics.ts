@@ -1,12 +1,13 @@
 /**
- * The four things the site is about, as the header mark. Each topic owns a
- * set of tags; a page whose tags overlap a topic lights that glyph up, and
- * the glyph links to the topic's busiest tag page. Add a tag here when a new
- * one belongs under one of the four; a tag in no topic is fine, it just
- * doesn't light anything.
+ * The things the site is about, as the header mark. Each topic owns a set of
+ * tags; a page whose tags overlap a topic lights that glyph up, and the glyph
+ * links to the topic's busiest tag page. A topic with nothing published under
+ * it is left out of the header, so the row is what the site actually has. Add
+ * a tag here when a new one belongs under a topic; a tag in no topic is fine,
+ * it just doesn't light anything.
  */
 export type Topic = {
-  key: "software-engineering" | "agents" | "music" | "hardware";
+  key: "software-engineering" | "agents" | "music" | "hardware" | "tacos";
   label: string;
   tags: string[];
 };
@@ -49,6 +50,11 @@ export const TOPICS: Topic[] = [
       "arduino",
       "3d-printing",
     ],
+  },
+  {
+    key: "tacos",
+    label: "Tacos",
+    tags: ["tacos", "food", "mexican", "greater-boston"],
   },
 ];
 

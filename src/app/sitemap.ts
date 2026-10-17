@@ -12,17 +12,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: `${site.url}/blog/${p.slug}`,
     lastModified: new Date(p.date),
   }));
+  // /reviews is in the sitemap once there is a review on it, dated by the newest.
+  const [newestReview] = getPostsByKind("review");
   return [
     { url: site.url, lastModified: indexChanged },
     { url: `${site.url}/blog`, lastModified: indexChanged },
-    ...(getPostsByKind("note").length
+    ...(newestReview
       ? [
           {
-            url: `${site.url}/notes`,
-            lastModified: new Date(
-              getPostsByKind("note")[0].updated ??
-                getPostsByKind("note")[0].date,
-            ),
+            url: `${site.url}/reviews`,
+            lastModified: new Date(newestReview.updated ?? newestReview.date),
           },
         ]
       : []),
