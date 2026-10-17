@@ -11,9 +11,6 @@ rating:
   - aspect: "The tacos"
     stars: 4.5
     note: "A real seasoned beef blend, and you can taste it"
-  - aspect: "The salsa"
-    stars: 5
-    note: "Mild verde from the counter; it finishes them"
   - aspect: "Ordering"
     stars: 4.5
     note: "Chipotle-style line, fast, point at what you want"
@@ -37,8 +34,8 @@ inside, the outside still gives it away. You pull in knowing exactly what used
 to be there.
 
 Inside there is more room than I expected, and a lot of it is seating. **Then
-the tacos turned out to be the first ones since I moved to the northeast that
-tasted like tacos.**
+the ground beef in those tacos turned out to be the most authentic taco meat I
+have had here.**
 
 ## Down the line
 
