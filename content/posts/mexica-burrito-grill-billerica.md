@@ -33,9 +33,9 @@ Grill](https://www.mymexica.com/) moved in, and whatever they did to the
 inside, the outside still gives it away. You pull in knowing exactly what used
 to be there.
 
-Inside there is more room than I expected, and a lot of it is seating. **Then
-the ground beef in those tacos turned out to be the most authentic taco meat I
-have had here.**
+Inside there is more room than I expected, and a lot of it is seating. Then
+the ground beef in those tacos turned out to be the most authentic taco meat
+I have had out here. Not close. The best.
 
 ## Down the line
 
@@ -47,15 +47,15 @@ line keeps moving.
 
 ## The tacos
 
-Flour tortillas, ground beef. The beef is what makes it. **The seasoning is
-spot on, an actual ground beef blend, and it has been a long time since I was
-served one** rather than meat that was browned and salted. The first bite was
-good and it still needed a little extra, and what it needed was heat.
+Flour tortillas, ground beef. The beef is what makes it. The seasoning is
+spot on and it is an actual ground beef blend, not meat that was browned and
+salted. It has been a long time since I was served one of those. The first
+bite was good and it still needed something, and what it needed was heat.
 
 So I went back up to the counter for hot sauce. It is one of the things you
 are supposed to pay for. The guy working the counter caught my eye, waved me
-off, handed it over and never said a word about it. **It was a verde with
-barely any heat to it, and with that on there the taco was perfect.**
+off, handed it over and never said a word about it. It was a verde with
+barely any heat to it. With that on, the taco was perfect.
 
 That is what I have been missing out here. I do not need it hot, and I do not
 need a novelty sauce with a warning on the label. I want a mild green salsa
