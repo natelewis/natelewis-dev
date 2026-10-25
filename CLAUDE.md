@@ -34,4 +34,7 @@ Personal blog. See README.md for the full picture.
   Per-post `accent` is applied by setting `--accent` inline on the article.
 - `next.config.ts` uses `output: "standalone"`; the Dockerfile depends on that.
 - Deploy: push to `main` → `.github/workflows/deploy.yml` → Artifact Registry → Cloud Run.
+- The `natelewis-blog` Claude Code skill lives in `skills/natelewis-blog/`, symlinked
+  from `~/.claude/skills/`. `VOICE.md` there is the voice reference and `SKILL.md`
+  says to read it before drafting any prose. See `skills/README.md`.
 - Verify a change with `npm run lint && npm run build`; for the container, `docker build .`.
